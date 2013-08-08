@@ -1,45 +1,133 @@
 package eu32k.spaceDingus.core;
 
-import com.badlogic.gdx.graphics.GL10;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Scaling;
+
+import eu32k.spaceDingus.core.factory.EntityFactory;
+import eu32k.spaceDingus.core.sceneGraph.SceneGraphWorld;
+import eu32k.spaceDingus.core.sceneGraph.system.SceneGraphSystem;
+import eu32k.spaceDingus.core.system.CollisionDamageSystem;
+import eu32k.spaceDingus.core.system.DamageSystem;
+import eu32k.spaceDingus.core.system.DeathSystem;
+import eu32k.spaceDingus.core.system.EngineSystem;
+import eu32k.spaceDingus.core.system.ExpireSystem;
+import eu32k.spaceDingus.core.system.MovableInputSystem;
+import eu32k.spaceDingus.core.system.MovableResetSystem;
+import eu32k.spaceDingus.core.system.PhysicsSystem;
+import eu32k.spaceDingus.core.system.ShieldSystem;
+import eu32k.spaceDingus.core.system.ShipSystem;
+import eu32k.spaceDingus.core.system.StabilizerSystem;
+import eu32k.spaceDingus.core.system.WeaponInputSystem;
+import eu32k.spaceDingus.core.system.WeaponSystem;
+import eu32k.spaceDingus.core.system.rendering.CameraSystem;
+import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
+import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
+import eu32k.spaceDingus.core.system.rendering.SpriteRenderSystem;
 
 public class SpaceDingus implements ApplicationListener {
-	Texture texture;
-	SpriteBatch batch;
-	float elapsed;
 
-	@Override
-	public void create () {
-		texture = new Texture(Gdx.files.internal("libgdx-logo.png"));
-		batch = new SpriteBatch();
-	}
+   private static final float VIRTUAL_WIDTH = 8.0f;
+   private static final float VIRTUAL_HEIGHT = 4.8f;
 
-	@Override
-	public void resize (int width, int height) {
-	}
+   private Camera camera;
+   private com.artemis.World artemisWorld;
+   private World box2dWorld;
+   public static Rectangle viewport;
+   private InputHandler inputHandler;
 
-	@Override
-	public void render () {
-		elapsed += Gdx.graphics.getDeltaTime();
-		Gdx.gl.glClearColor(0, 0, 0, 0);
-		Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(texture, 100+100*(float)Math.cos(elapsed), 100+25*(float)Math.sin(elapsed));
-		batch.end();
-	}
+   @Override
+   public void create() {
+      camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+      // camera = new PerspectiveCamera(67, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+      // camera.position.set(0f, 0f, 3f);
+      // camera.near = 0.05f;
+      // camera.far = 20f;
+      // camera.update();
 
-	@Override
-	public void pause () {
-	}
+      inputHandler = new InputHandler(camera);
 
-	@Override
-	public void resume () {
-	}
+      artemisWorld = new SceneGraphWorld();
+      box2dWorld = new World(new Vector2(0, 0), true);
+      EntityFactory.init(artemisWorld, box2dWorld, null);
 
-	@Override
-	public void dispose () {
-	}
+      artemisWorld.setSystem(new MovableResetSystem());
+      artemisWorld.setSystem(new MovableInputSystem(inputHandler));
+      artemisWorld.setSystem(new StabilizerSystem());
+      artemisWorld.setSystem(new ShipSystem());
+      artemisWorld.setSystem(new EngineSystem(camera));
+
+      artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
+      artemisWorld.setSystem(new SceneGraphSystem());
+      artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
+      artemisWorld.setSystem(new DamageSystem());
+      artemisWorld.setSystem(new ShieldSystem());
+
+      artemisWorld.setSystem(new WeaponInputSystem(inputHandler));
+      artemisWorld.setSystem(new WeaponSystem());
+
+      artemisWorld.setSystem(new ExpireSystem());
+      artemisWorld.setSystem(new DeathSystem());
+
+      artemisWorld.setSystem(new CameraSystem(camera));
+      artemisWorld.setSystem(new SpriteRenderSystem(camera));
+      // artemisWorld.setSystem(new PolygonModelRenderSystem(camera));
+      artemisWorld.setSystem(new DebugRenderSystem(inputHandler, box2dWorld, camera));
+      artemisWorld.setSystem(new HealthRenderSystem(camera));
+
+      artemisWorld.initialize();
+
+      createEntities();
+   }
+
+   private static void createEntities() {
+      // EntityFactory.createBackground();
+      EntityFactory.createPlayerShip(0, 0);
+      EntityFactory.createEnemy(1, 1);
+      EntityFactory.createAsteroid(3, 0);
+      EntityFactory.createAsteroid(-2, 1);
+   }
+
+   @Override
+   public void dispose() {
+      // NOP
+   }
+
+   @Override
+   public void render() {
+      inputHandler.update();
+
+      Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+      Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+      Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+      artemisWorld.setDelta(Gdx.graphics.getDeltaTime());
+      artemisWorld.process();
+   }
+
+   @Override
+   public void resize(int width, int height) {
+      Vector2 newVirtualRes = new Vector2(0f, 0f);
+      Vector2 crop = new Vector2(width, height);
+      newVirtualRes.set(Scaling.fit.apply(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, width, height));
+      crop.sub(newVirtualRes);
+      crop.scl(.5f);
+      viewport = new Rectangle(crop.x, crop.y, newVirtualRes.x, newVirtualRes.y);
+   }
+
+   @Override
+   public void pause() {
+   }
+
+   @Override
+   public void resume() {
+   }
 }
