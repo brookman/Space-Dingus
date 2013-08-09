@@ -83,7 +83,15 @@ public class DebugRenderSystem extends EntitySystem {
 
       batch = new SpriteBatch();
       shapeRenderer = new ShapeRenderer();
-      debugRenderer = new Box2DDebugRenderer(true, true, true, true, true, true);
+
+      debugRenderer = new Box2DDebugRenderer();
+      debugRenderer.setDrawAABBs(true);
+      debugRenderer.setDrawBodies(true);
+      // debugRenderer.setDrawContacts(true);
+      debugRenderer.setDrawInactiveBodies(true);
+      debugRenderer.setDrawJoints(true);
+      debugRenderer.setDrawVelocities(true);
+
       debugFont = new BitmapFont(Gdx.files.internal("fonts/xolonium_green.fnt"), new TextureRegion(Textures.get("fonts/xolonium_green.png")), false);
       debugFont.setScale(0.0017f);
       debugFont.setUseIntegerPositions(false);
@@ -123,20 +131,33 @@ public class DebugRenderSystem extends EntitySystem {
          s.append("Player\n");
       }
 
-      s.append("X:" + String.format("%.2f", pos.x) + " Y:" + String.format("%.2f", pos.y) + "\n");
+      s.append("X:" + format(pos.x) + " Y:" + format(pos.y) + "\n");
       if (hm.has(e)) {
-         s.append("HP:" + String.format("%.2f", hm.get(e).health) + "/" + String.format("%.2f", hm.get(e).maxHealth) + "\n");
+         s.append("HP:" + format(hm.get(e).health) + "/" + format(hm.get(e).maxHealth) + "\n");
       }
 
       if (phm.has(e)) {
          Body body = phm.get(e).body;
-         s.append("Speed:" + String.format("%.2f", body.getLinearVelocity().len()) + "\n");
-         s.append("Angle:" + String.format("%.2f", body.getAngle() * MathUtils.radiansToDegrees) + "\n");
-         s.append("Angular speed:" + String.format("%.2f", body.getAngularVelocity()) + "\n");
+         s.append("Speed:" + format(body.getLinearVelocity().len()) + "\n");
+         s.append("Angle:" + format(body.getAngle() * MathUtils.radiansToDegrees) + "\n");
+         s.append("Angular speed:" + format(body.getAngularVelocity()) + "\n");
       }
 
       String result = s.toString();
       debugFont.drawMultiLine(batch, result, pos.x - debugFont.getMultiLineBounds(result).width / 2, pos.y);
+   }
+
+   private static String format(float f) {
+      String num = "" + MathUtils.round(f * 100.0f) / 100.0f;
+      if (f >= 0.0f) {
+         num = " " + num;
+      }
+      String arr[] = num.split("\\.");
+      String suffix = arr[arr.length - 1];
+      if (suffix.length() == 1) {
+         return num + "0";
+      }
+      return num;
    }
 
    @Override
