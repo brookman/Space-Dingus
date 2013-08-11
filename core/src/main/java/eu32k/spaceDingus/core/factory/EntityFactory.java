@@ -202,6 +202,16 @@ public class EntityFactory {
       }
    };
 
+   private static Pool<Body> bulletBodyPool2 = new Pool<Body>() {
+      @Override
+      protected Body newObject() {
+         FixtureDef fd = fdBuilder.boxShape(0.08f, 0.08f).density(0.5f).friction(1.0f).build();
+         Body body = bodyBuilder.type(BodyType.DynamicBody).fixture(fd).bullet().categoryBits(Bits.PLAYER_BULLET_CATEGORY).maskBits(Bits.PLAYER_BULLET_MASK).build();
+         body.resetMassData();
+         return body;
+      }
+   };
+
    public static Entity createBullet(Vector2 position, Vector2 velocity, float rotation) {
       Entity e = artemisWorld.createEntity();
 
@@ -212,7 +222,27 @@ public class EntityFactory {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(TransformComponent.class));
-      e.addComponent(Pools.obtain(SpriteComponent.class).init("textures/bullet2.png", 0.17f, 0.17f, RenderLayer.HIGHER_COMPONENTS_1));
+      e.addComponent(Pools.obtain(SpriteComponent.class).init("textures/bullet.png", 0.17f, 0.17f, RenderLayer.HIGHER_COMPONENTS_1));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(0.3f, true));
+      e.addComponent(Pools.obtain(ExpireComponent.class).init(1500));
+
+      pc.activate(position, rotation, velocity);
+
+      e.addToWorld();
+      return e;
+   }
+
+   public static Entity createBullet2(Vector2 position, Vector2 velocity, float rotation) {
+      Entity e = artemisWorld.createEntity();
+
+      Body body = bulletBodyPool2.obtain();
+      body.setUserData(e);
+
+      PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(body, bulletBodyPool2);
+
+      e.addComponent(pc);
+      e.addComponent(Pools.obtain(TransformComponent.class));
+      e.addComponent(Pools.obtain(SpriteComponent.class).init("textures/bullet2.png", 0.4f, 0.4f, RenderLayer.HIGHER_COMPONENTS_1));
       e.addComponent(Pools.obtain(DamageComponent.class).init(0.3f, true));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(1000));
 
