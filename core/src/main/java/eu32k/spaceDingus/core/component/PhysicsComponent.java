@@ -27,6 +27,7 @@ public class PhysicsComponent extends Component {
    public void activate(Vector2 position, float rotation, Vector2 velocity) {
       body.setTransform(position, rotation);
       body.setLinearVelocity(velocity);
+      body.setAngularVelocity(0);
       body.setActive(true);
    }
 
