@@ -1,4 +1,4 @@
-package eu32k.spaceDingus.common;
+package eu32k.spaceDingus.core.common;
 
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;

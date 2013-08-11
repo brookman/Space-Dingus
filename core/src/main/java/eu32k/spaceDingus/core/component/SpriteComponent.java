@@ -3,7 +3,7 @@ package eu32k.spaceDingus.core.component;
 import com.artemis.Component;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 
-import eu32k.spaceDingus.common.Textures;
+import eu32k.spaceDingus.core.common.Textures;
 
 public class SpriteComponent extends Component {
 

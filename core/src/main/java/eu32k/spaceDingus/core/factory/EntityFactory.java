@@ -13,12 +13,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Pool;
 import com.badlogic.gdx.utils.Pools;
 
-import eu32k.spaceDingus.common.Bits;
-import eu32k.spaceDingus.common.BodyBuilder;
-import eu32k.spaceDingus.common.Directions;
-import eu32k.spaceDingus.common.FixtureDefBuilder;
-import eu32k.spaceDingus.common.PhysicsModel;
-import eu32k.spaceDingus.common.RenderLayer;
+import eu32k.spaceDingus.core.common.Bits;
+import eu32k.spaceDingus.core.common.BodyBuilder;
+import eu32k.spaceDingus.core.common.Directions;
+import eu32k.spaceDingus.core.common.FixtureDefBuilder;
+import eu32k.spaceDingus.core.common.PhysicsModel;
+import eu32k.spaceDingus.core.common.RenderLayer;
 import eu32k.spaceDingus.core.component.CameraTargetComponent;
 import eu32k.spaceDingus.core.component.DamagableComponent;
 import eu32k.spaceDingus.core.component.DamageComponent;
@@ -121,7 +121,9 @@ public class EntityFactory {
       e.addComponent(new PlayerControlledMovableComponent());
 
       // ObjLoader loader = new ObjLoader();
-      // Model model = loader.loadModel(Gdx.files.internal("3dmodels/dark_fighter_6.object"), new TextureProvider() {
+      // Model model =
+      // loader.loadModel(Gdx.files.internal("3dmodels/dark_fighter_6.object"),
+      // new TextureProvider() {
       // @Override
       // public Texture load(String fileName) {
       // return Textures.get(fileName);
@@ -133,8 +135,9 @@ public class EntityFactory {
 
       createWeapon(e, 0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
       createWeapon(e, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(e, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(e, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      createWeapon(e, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(e, -0.25f,
+      // -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
 
       e.addToWorld();
 

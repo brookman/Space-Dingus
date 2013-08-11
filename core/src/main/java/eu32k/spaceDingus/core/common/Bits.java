@@ -1,4 +1,4 @@
-package eu32k.spaceDingus.common;
+package eu32k.spaceDingus.core.common;
 
 public class Bits {
 

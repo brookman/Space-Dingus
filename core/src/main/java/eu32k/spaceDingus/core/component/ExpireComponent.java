@@ -2,7 +2,7 @@ package eu32k.spaceDingus.core.component;
 
 import com.artemis.Component;
 
-import eu32k.spaceDingus.common.Time;
+import eu32k.spaceDingus.core.common.Time;
 
 public class ExpireComponent extends Component {
 

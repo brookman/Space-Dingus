@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
-import eu32k.spaceDingus.common.Directions;
+import eu32k.spaceDingus.core.common.Directions;
 
 public class InputHandler {
 

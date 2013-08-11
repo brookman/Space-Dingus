@@ -6,7 +6,7 @@ import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.physics.box2d.Body;
 
-import eu32k.spaceDingus.common.Directions;
+import eu32k.spaceDingus.core.common.Directions;
 import eu32k.spaceDingus.core.component.MovableComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.StabilizerComponent;

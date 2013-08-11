@@ -18,8 +18,8 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 
-import eu32k.spaceDingus.common.Textures;
 import eu32k.spaceDingus.core.InputHandler;
+import eu32k.spaceDingus.core.common.Textures;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;

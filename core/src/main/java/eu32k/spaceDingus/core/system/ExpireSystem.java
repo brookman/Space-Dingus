@@ -8,7 +8,7 @@ import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.Bag;
 import com.badlogic.gdx.utils.Pools;
 
-import eu32k.spaceDingus.common.Time;
+import eu32k.spaceDingus.core.common.Time;
 import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 

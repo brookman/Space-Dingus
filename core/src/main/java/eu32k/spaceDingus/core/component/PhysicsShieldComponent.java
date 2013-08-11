@@ -4,7 +4,7 @@ import com.artemis.Component;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
-import eu32k.spaceDingus.common.Bits;
+import eu32k.spaceDingus.core.common.Bits;
 
 public class PhysicsShieldComponent extends Component {
 
