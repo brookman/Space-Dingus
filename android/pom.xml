@@ -90,7 +90,8 @@
 					<assetsDirectory>${project.basedir}/../assets</assetsDirectory>
 					<resourceDirectory>${project.basedir}/res</resourceDirectory>
 					<sdk>
-						<platform>15</platform>
+						<path>/root/auto-builds/android/adt-bundle-linux-x86_64-20130729/sdk</path>
+						<platform>18</platform>
 					</sdk>
 					<undeployBeforeDeploy>true</undeployBeforeDeploy>
 					<dex>
