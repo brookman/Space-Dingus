@@ -134,8 +134,10 @@ public class EntityFactory {
       e.addComponent(Pools.obtain(CameraTargetComponent.class));
 
       createWeapon(e, 0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      createWeapon(e, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      createWeapon(e, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(e, 0.25f,
+      // -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(e, -0.25f,
+      // 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
       // createWeapon(e, -0.25f,
       // -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
 
