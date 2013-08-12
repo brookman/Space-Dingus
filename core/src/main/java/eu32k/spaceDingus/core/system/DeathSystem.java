@@ -36,7 +36,7 @@ public class DeathSystem extends EntityProcessingSystem {
 
          if (dm.has(e) && tm.has(e)) {
             TransformComponent pos = tm.get(e);
-            dm.get(e).createAnimation(pos.x, pos.y, pos.rotation);
+            dm.get(e).createAnimation(pos.x, pos.y, pos.getRotation());
          }
 
          if (phm.has(e)) {

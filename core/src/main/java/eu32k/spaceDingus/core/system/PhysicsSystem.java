@@ -49,6 +49,6 @@ public class PhysicsSystem extends EntitySystem {
 
       trans.x = physics.body.getPosition().x;
       trans.y = physics.body.getPosition().y;
-      trans.rotation = physics.body.getAngle() * MathUtils.radiansToDegrees;
+      trans.setRotation(physics.body.getAngle() * MathUtils.radiansToDegrees);
    }
 }

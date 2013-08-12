@@ -1,19 +1,24 @@
-package eu32k.spaceDingus.core.system;
+package eu32k.spaceDingus.core.system.moving;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 
+import eu32k.spaceDingus.core.InputHandler;
 import eu32k.spaceDingus.core.component.MovableComponent;
+import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
 
-public class MovableResetSystem extends EntityProcessingSystem {
+public class MovableInputSystem extends EntityProcessingSystem {
 
    private ComponentMapper<MovableComponent> mm;
 
+   private InputHandler handler;
+
    @SuppressWarnings("unchecked")
-   public MovableResetSystem() {
-      super(Aspect.getAspectForAll(MovableComponent.class));
+   public MovableInputSystem(InputHandler handler) {
+      super(Aspect.getAspectForAll(MovableComponent.class, PlayerControlledMovableComponent.class));
+      this.handler = handler;
    }
 
    @Override
@@ -24,6 +29,6 @@ public class MovableResetSystem extends EntityProcessingSystem {
    @Override
    protected void process(Entity e) {
       MovableComponent movableComponent = mm.get(e);
-      movableComponent.directions = 0;
+      movableComponent.directions = handler.directions;
    }
 }

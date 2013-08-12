@@ -70,7 +70,7 @@ public class SpriteRenderSystem extends EntitySystem {
          batch.setColor(1.0f, 1.0f, 1.0f, sm.get(e).alpha);
       }
 
-      batch.draw(sprite, pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2, sprite.getWidth() / 2, sprite.getHeight() / 2, sprite.getWidth(), sprite.getHeight(), 1f, 1f, pos.rotation);
+      batch.draw(sprite, pos.x - sprite.getWidth() / 2, pos.y - sprite.getHeight() / 2, sprite.getWidth() / 2, sprite.getHeight() / 2, sprite.getWidth(), sprite.getHeight(), 1f, 1f, pos.getRotation());
    }
 
    @Override

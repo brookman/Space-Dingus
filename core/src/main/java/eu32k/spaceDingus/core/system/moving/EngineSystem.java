@@ -1,4 +1,4 @@
-package eu32k.spaceDingus.core.system;
+package eu32k.spaceDingus.core.system.moving;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;
@@ -63,7 +63,7 @@ public class EngineSystem extends EntityProcessingSystem {
       PhysicsComponent physicsComponent = pm.get(partent);
       Body body = physicsComponent.body;
 
-      Vector2 force = new Vector2(MathUtils.cos(trans.rotation * MathUtils.degreesToRadians), MathUtils.sin(trans.rotation * MathUtils.degreesToRadians)).nor().scl(enigne.thrust * world.delta);
+      Vector2 force = new Vector2(MathUtils.cos(trans.getRotationAsRadians()), MathUtils.sin(trans.getRotationAsRadians())).nor().scl(enigne.thrust * world.delta);
       body.applyForce(force, new Vector2(trans.x, trans.y), true);
 
       // sh.setColor(1.0f, 0.0f, 0.0f, 1.0f);

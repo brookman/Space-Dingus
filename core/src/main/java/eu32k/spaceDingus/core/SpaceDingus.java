@@ -11,21 +11,24 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Scaling;
 
 import eu32k.spaceDingus.core.factory.EntityFactory;
+import eu32k.spaceDingus.core.factory.Misc;
+import eu32k.spaceDingus.core.factory.Ship;
 import eu32k.spaceDingus.core.sceneGraph.SceneGraphWorld;
 import eu32k.spaceDingus.core.sceneGraph.system.SceneGraphSystem;
 import eu32k.spaceDingus.core.system.CollisionDamageSystem;
 import eu32k.spaceDingus.core.system.DamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
-import eu32k.spaceDingus.core.system.EngineSystem;
 import eu32k.spaceDingus.core.system.ExpireSystem;
-import eu32k.spaceDingus.core.system.MovableInputSystem;
-import eu32k.spaceDingus.core.system.MovableResetSystem;
 import eu32k.spaceDingus.core.system.PhysicsSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
-import eu32k.spaceDingus.core.system.ShipSystem;
-import eu32k.spaceDingus.core.system.StabilizerSystem;
 import eu32k.spaceDingus.core.system.WeaponInputSystem;
 import eu32k.spaceDingus.core.system.WeaponSystem;
+import eu32k.spaceDingus.core.system.moving.EngineSystem;
+import eu32k.spaceDingus.core.system.moving.MovableInputSystem;
+import eu32k.spaceDingus.core.system.moving.MovableResetSystem;
+import eu32k.spaceDingus.core.system.moving.StabilizerSystem;
+import eu32k.spaceDingus.core.system.moving.StearingSystem;
+import eu32k.spaceDingus.core.system.moving.TargetingSystem;
 import eu32k.spaceDingus.core.system.rendering.CameraSystem;
 import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
@@ -58,9 +61,10 @@ public class SpaceDingus implements ApplicationListener {
       EntityFactory.init(artemisWorld, box2dWorld, null);
 
       artemisWorld.setSystem(new MovableResetSystem());
+      artemisWorld.setSystem(new TargetingSystem(camera));
       artemisWorld.setSystem(new MovableInputSystem(inputHandler));
       artemisWorld.setSystem(new StabilizerSystem());
-      artemisWorld.setSystem(new ShipSystem());
+      artemisWorld.setSystem(new StearingSystem());
       artemisWorld.setSystem(new EngineSystem(camera));
 
       artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
@@ -88,10 +92,10 @@ public class SpaceDingus implements ApplicationListener {
 
    private static void createEntities() {
       // EntityFactory.createBackground();
-      EntityFactory.createPlayerShip(0, 0);
-      EntityFactory.createEnemy(1, 1);
-      EntityFactory.createAsteroid(3, 0);
-      EntityFactory.createAsteroid(-2, 1);
+      Ship.createPlayerShip(0, 0);
+      Ship.createEnemy(1, 1);
+      Misc.createAsteroid(3, 0);
+      Misc.createAsteroid(-2, 1);
    }
 
    @Override

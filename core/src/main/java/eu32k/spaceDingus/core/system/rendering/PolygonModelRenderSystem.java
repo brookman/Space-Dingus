@@ -55,7 +55,7 @@ public class PolygonModelRenderSystem extends EntityProcessingSystem {
 
       modelInstance.transform.setToTranslation(pos.x, pos.y, 0);
       modelInstance.transform.rotate(new Vector3(1, 0, 0), 90);
-      modelInstance.transform.rotate(new Vector3(0, 1, 0), pos.rotation + 180);
+      modelInstance.transform.rotate(new Vector3(0, 1, 0), pos.getRotation() + 180);
       // modelInstance.transform.rotate(new Vector3(1, 0, 0), 90);
       modelInstance.transform.scale(0.02f, 0.02f, 0.02f);
 

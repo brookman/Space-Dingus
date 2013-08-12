@@ -1,4 +1,4 @@
-package eu32k.spaceDingus.core.system;
+package eu32k.spaceDingus.core.system.moving;
 
 import com.artemis.Aspect;
 import com.artemis.ComponentMapper;

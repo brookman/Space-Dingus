@@ -11,7 +11,7 @@ import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.TransformComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
-import eu32k.spaceDingus.core.factory.EntityFactory;
+import eu32k.spaceDingus.core.factory.Bullet;
 import eu32k.spaceDingus.core.sceneGraph.component.NodeComponent;
 
 public class WeaponSystem extends EntityProcessingSystem {
@@ -42,7 +42,7 @@ public class WeaponSystem extends EntityProcessingSystem {
 
       Vector2 position = new Vector2(tm.get(e).x, tm.get(e).y);
       Vector2 velocity = new Vector2(weaponComponent.targetX - position.x, weaponComponent.targetY - position.y);
-      tm.get(e).rotation = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
+      tm.get(e).setRotation(MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees);
 
       if (!weaponComponent.shouldShoot()) {
          return;
@@ -65,11 +65,13 @@ public class WeaponSystem extends EntityProcessingSystem {
          }
       }
 
-      if (MathUtils.randomBoolean()) {
-         EntityFactory.createBullet(position, velocity, rot);
-      } else {
-         EntityFactory.createBullet2(position, velocity, rot);
-      }
+      Bullet.createRocket(position, rot);
+
+      // if (MathUtils.randomBoolean()) {
+      // EntityFactory.createBullet(position, velocity, rot);
+      // } else {
+      Bullet.createBullet2(position, velocity, rot);
+      // }
 
       weaponComponent.shoot();
    }

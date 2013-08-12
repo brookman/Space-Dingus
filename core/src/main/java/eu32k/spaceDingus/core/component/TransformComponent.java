@@ -2,6 +2,7 @@ package eu32k.spaceDingus.core.component;
 
 import com.artemis.Component;
 import com.artemis.utils.Utils;
+import com.badlogic.gdx.math.MathUtils;
 
 import eu32k.spaceDingus.core.sceneGraph.component.LocalTransformComponent;
 
@@ -9,7 +10,7 @@ public class TransformComponent extends Component {
 
    public float x;
    public float y;
-   public float rotation;
+   private float rotation;
 
    public TransformComponent init() {
       x = 0;
@@ -27,7 +28,7 @@ public class TransformComponent extends Component {
 
    public TransformComponent init(float x, float y, float rotation) {
       init(x, y);
-      this.rotation = rotation;
+      setRotation(rotation);
       return this;
    }
 
@@ -66,14 +67,20 @@ public class TransformComponent extends Component {
 
    public void setRotation(float rotation) {
       this.rotation = rotation;
+      while (this.rotation >= 360) {
+         this.rotation -= 360;
+      }
+      while (this.rotation < 0) {
+         this.rotation += 360;
+      }
    }
 
    public void addRotation(float angle) {
-      rotation = (rotation + angle) % 360;
+      setRotation(rotation + angle);
    }
 
    public float getRotationAsRadians() {
-      return (float) Math.toRadians(rotation);
+      return MathUtils.degreesToRadians * rotation;
    }
 
    public float getDistanceTo(LocalTransformComponent t) {
