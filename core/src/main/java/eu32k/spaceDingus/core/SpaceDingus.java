@@ -23,6 +23,7 @@ import eu32k.spaceDingus.core.system.PhysicsSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
 import eu32k.spaceDingus.core.system.WeaponInputSystem;
 import eu32k.spaceDingus.core.system.WeaponSystem;
+import eu32k.spaceDingus.core.system.moving.AimingSystem;
 import eu32k.spaceDingus.core.system.moving.EngineSystem;
 import eu32k.spaceDingus.core.system.moving.MovableInputSystem;
 import eu32k.spaceDingus.core.system.moving.MovableResetSystem;
@@ -60,16 +61,18 @@ public class SpaceDingus implements ApplicationListener {
       box2dWorld = new World(new Vector2(0, 0), true);
       EntityFactory.init(artemisWorld, box2dWorld, null);
 
+      artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
+      artemisWorld.setSystem(new SceneGraphSystem());
+      artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
+
       artemisWorld.setSystem(new MovableResetSystem());
-      artemisWorld.setSystem(new TargetingSystem(camera));
+      artemisWorld.setSystem(new TargetingSystem());
+      artemisWorld.setSystem(new AimingSystem());
       artemisWorld.setSystem(new MovableInputSystem(inputHandler));
       artemisWorld.setSystem(new StabilizerSystem());
       artemisWorld.setSystem(new StearingSystem());
       artemisWorld.setSystem(new EngineSystem(camera));
 
-      artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
-      artemisWorld.setSystem(new SceneGraphSystem());
-      artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
       artemisWorld.setSystem(new DamageSystem());
       artemisWorld.setSystem(new ShieldSystem());
 

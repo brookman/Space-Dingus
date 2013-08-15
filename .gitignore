@@ -8,3 +8,4 @@
 html/src/main/gwt-unitCache
 html/src/main/webapp
 android/*.jar
+*.gwt-log

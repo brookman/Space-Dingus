@@ -65,12 +65,12 @@ public class WeaponSystem extends EntityProcessingSystem {
          }
       }
 
-      Bullet.createRocket(position, rot);
+      Bullet.createRocket(position, velocity.cpy().scl(0.2f), rot);
 
       // if (MathUtils.randomBoolean()) {
       // EntityFactory.createBullet(position, velocity, rot);
       // } else {
-      Bullet.createBullet2(position, velocity, rot);
+      // Bullet.createBullet2(position, velocity, rot);
       // }
 
       weaponComponent.shoot();

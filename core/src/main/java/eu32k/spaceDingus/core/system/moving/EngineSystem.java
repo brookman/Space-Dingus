@@ -64,7 +64,11 @@ public class EngineSystem extends EntityProcessingSystem {
       Body body = physicsComponent.body;
 
       Vector2 force = new Vector2(MathUtils.cos(trans.getRotationAsRadians()), MathUtils.sin(trans.getRotationAsRadians())).nor().scl(enigne.thrust * world.delta);
+
+      // System.out.println("--- force before is: " + body.getAngularVelocity());
+      // System.out.println("applying: " + force.len() + " " + enigne.thrust + " " + world.delta);
       body.applyForce(force, new Vector2(trans.x, trans.y), true);
+      // System.out.println("force after is: " + body.getAngularVelocity());
 
       // sh.setColor(1.0f, 0.0f, 0.0f, 1.0f);
       // sh.begin(ShapeType.Filled);

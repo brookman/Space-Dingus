@@ -62,15 +62,15 @@ public class Ship {
       e.addComponent(Pools.obtain(SpriteComponent.class).init(shipModel.getTexturePath(), 1.0f, 1.0f, RenderLayer.ACTORS));
       e.addComponent(Pools.obtain(StabilizerComponent.class).init(true, true));
 
-      Enigne.createEngine(e, -0.45f, -0.31f, 0.0f, Directions.getDirections(true, false, false, false, true, false));
-      Enigne.createEngine(e, -0.45f, 0.31f, 0.0f, Directions.getDirections(true, false, false, false, false, true));
-      Enigne.createEngine(e, 0.45f, -0.31f, 180.0f, Directions.getDirections(false, true, false, false, false, true));
-      Enigne.createEngine(e, 0.45f, 0.31f, 180.0f, Directions.getDirections(false, true, false, false, true, false));
+      Enigne.createEngine(e, -0.45f, -0.31f, 0.0f, 50.0f, Directions.getDirections(true, false, false, false, true, false), 0.5f);
+      Enigne.createEngine(e, -0.45f, 0.31f, 0.0f, 50.0f, Directions.getDirections(true, false, false, false, false, true), 0.5f);
+      Enigne.createEngine(e, 0.45f, -0.31f, 180.0f, 50.0f, Directions.getDirections(false, true, false, false, false, true), 0.5f);
+      Enigne.createEngine(e, 0.45f, 0.31f, 180.0f, 50.0f, Directions.getDirections(false, true, false, false, true, false), 0.5f);
 
-      Enigne.createEngine(e, -0.25f, -0.45f, 90.0f, Directions.getDirections(false, false, true, false, false, true));
-      Enigne.createEngine(e, 0.25f, -0.45f, 90.0f, Directions.getDirections(false, false, true, false, true, false));
-      Enigne.createEngine(e, -0.25f, 0.45f, 270.0f, Directions.getDirections(false, false, false, true, true, false));
-      Enigne.createEngine(e, 0.25f, 0.45f, 270.0f, Directions.getDirections(false, false, false, true, false, true));
+      Enigne.createEngine(e, -0.25f, -0.45f, 90.0f, 50.0f, Directions.getDirections(false, false, true, false, false, true), 0.5f);
+      Enigne.createEngine(e, 0.25f, -0.45f, 90.0f, 50.0f, Directions.getDirections(false, false, true, false, true, false), 0.5f);
+      Enigne.createEngine(e, -0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, true, false), 0.5f);
+      Enigne.createEngine(e, 0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, false, true), 0.5f);
       Misc.createShield(e, bits, fixture, e.getComponent(ShieldComponent.class));
 
       return e;
