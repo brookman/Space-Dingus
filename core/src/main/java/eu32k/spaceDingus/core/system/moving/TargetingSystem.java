@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.MathUtils;
 import eu32k.spaceDingus.core.common.Directions;
 import eu32k.spaceDingus.core.component.MovableComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
-import eu32k.spaceDingus.core.component.TargetPositionComponent;
 import eu32k.spaceDingus.core.component.TransformComponent;
+import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 
 public class TargetingSystem extends EntityProcessingSystem {
 
@@ -37,6 +37,11 @@ public class TargetingSystem extends EntityProcessingSystem {
       MovableComponent movableComponent = mm.get(e);
       TransformComponent thisPos = tm.get(e);
       TargetPositionComponent targetPos = tpm.get(e);
+
+      if (!targetPos.enabled) {
+         movableComponent.directions = Directions.getDirections(true, false, false, false, false, false);
+         return;
+      }
 
       float targetRotation = MathUtils.atan2(targetPos.y - thisPos.y, targetPos.x - thisPos.x);
       float currentRotation = thisPos.getRotationAsRadians();

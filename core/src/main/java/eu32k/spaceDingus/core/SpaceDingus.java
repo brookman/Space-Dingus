@@ -1,5 +1,6 @@
 package eu32k.spaceDingus.core;
 
+import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -20,6 +21,7 @@ import eu32k.spaceDingus.core.system.DamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
 import eu32k.spaceDingus.core.system.ExpireSystem;
 import eu32k.spaceDingus.core.system.PhysicsSystem;
+import eu32k.spaceDingus.core.system.RemoveSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
 import eu32k.spaceDingus.core.system.WeaponInputSystem;
 import eu32k.spaceDingus.core.system.WeaponSystem;
@@ -48,7 +50,7 @@ public class SpaceDingus implements ApplicationListener {
 
    @Override
    public void create() {
-      camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+      camera = new OrthographicCamera(VIRTUAL_WIDTH * 2, VIRTUAL_HEIGHT * 2);
       // camera = new PerspectiveCamera(67, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
       // camera.position.set(0f, 0f, 3f);
       // camera.near = 0.05f;
@@ -59,6 +61,9 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld = new SceneGraphWorld();
       box2dWorld = new World(new Vector2(0, 0), true);
+
+      artemisWorld.setManager(new GroupManager());
+
       EntityFactory.init(artemisWorld, box2dWorld, null);
 
       artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
@@ -66,8 +71,8 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
 
       artemisWorld.setSystem(new MovableResetSystem());
-      artemisWorld.setSystem(new TargetingSystem());
       artemisWorld.setSystem(new AimingSystem());
+      artemisWorld.setSystem(new TargetingSystem());
       artemisWorld.setSystem(new MovableInputSystem(inputHandler));
       artemisWorld.setSystem(new StabilizerSystem());
       artemisWorld.setSystem(new StearingSystem());
@@ -81,6 +86,7 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld.setSystem(new ExpireSystem());
       artemisWorld.setSystem(new DeathSystem());
+      artemisWorld.setSystem(new RemoveSystem());
 
       artemisWorld.setSystem(new CameraSystem(camera));
       artemisWorld.setSystem(new SpriteRenderSystem(camera));

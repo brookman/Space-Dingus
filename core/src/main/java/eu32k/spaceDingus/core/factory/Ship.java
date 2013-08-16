@@ -1,6 +1,7 @@
 package eu32k.spaceDingus.core.factory;
 
 import com.artemis.Entity;
+import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -78,6 +79,7 @@ public class Ship {
 
    public static Entity createEnemy(float x, float y) {
       Entity e = createShipType1(x, y, Bits.ENEMY);
+      EntityFactory.artemisWorld.getManager(GroupManager.class).add(e, "ENEMY");
       Weapon.createWeapon(e, -0.25f, 0.31f);
       Weapon.createWeapon(e, -0.25f, -0.31f);
       e.addToWorld();

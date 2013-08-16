@@ -62,10 +62,11 @@ public class WeaponSystem extends EntityProcessingSystem {
 
          if (phm.has(parent)) {
             velocity.add(phm.get(parent).body.getLinearVelocity());
+            Bullet.createRocket(position, phm.get(parent).body.getLinearVelocity(), rot);
          }
       }
 
-      Bullet.createRocket(position, velocity.cpy().scl(0.2f), rot);
+      // Bullet.createRocket(position, velocity.cpy().scl(0.0f), rot);
 
       // if (MathUtils.randomBoolean()) {
       // EntityFactory.createBullet(position, velocity, rot);

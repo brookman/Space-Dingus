@@ -16,8 +16,8 @@ import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.MovableComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.SpriteComponent;
-import eu32k.spaceDingus.core.component.TargetPositionComponent;
 import eu32k.spaceDingus.core.component.TransformComponent;
+import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 import eu32k.spaceDingus.core.sceneGraph.component.NodeComponent;
 
 public class Bullet {
@@ -104,11 +104,11 @@ public class Bullet {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(NodeComponent.class).init());
-      e.addComponent(Pools.obtain(TargetPositionComponent.class).init(2, 2));
+      e.addComponent(Pools.obtain(TargetPositionComponent.class).init(0, 0));
       e.addComponent(Pools.obtain(TransformComponent.class).init(position.x, position.y, rotation));
       e.addComponent(Pools.obtain(MovableComponent.class).init(50f, 50.0f));
       e.addComponent(Pools.obtain(SpriteComponent.class).init("textures/rocket.png", 0.4f, 0.4f, RenderLayer.HIGHER_COMPONENTS_1));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(1.0f, true));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(10.0f, true));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(5000));
 
       Enigne.createEngine(e, -0.17f, -0.05f, 90f, 0.2f, Directions.getDirections(false, false, false, false, false, true), 0.4f);
