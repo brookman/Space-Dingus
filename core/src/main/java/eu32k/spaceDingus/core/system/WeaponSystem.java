@@ -12,6 +12,7 @@ import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
+import eu32k.spaceDingus.core.factory.Bullet;
 
 public class WeaponSystem extends EntityProcessingSystem {
 
@@ -40,7 +41,7 @@ public class WeaponSystem extends EntityProcessingSystem {
       Actor actor = am.get(e).actor;
       Vector2 position = new Vector2(actor.getX(), actor.getY());
       Vector2 velocity = new Vector2(weaponComponent.targetX - position.x, weaponComponent.targetY - position.y);
-      // actor.setRotation(MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees);
+      actor.setRotation(MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees);
 
       if (!weaponComponent.shouldShoot()) {
          return;
@@ -55,9 +56,14 @@ public class WeaponSystem extends EntityProcessingSystem {
          velocity.scl(0.0f);
       }
 
-      // if (nm.has(e)) {
-      // Entity parent = nm.get(e).getParent();
-      //
+      if (velocity.len() > 7) {
+         System.out.println(velocity.len());
+      }
+      Bullet.createBullet(position, velocity, rot);
+
+      // if (am.has(e)) {
+      // Group parent = am.get(e).actor.getParent();
+      // Entity parentEntity = parent.
       //
       // if (phm.has(parent)) {
       // velocity.add(phm.get(parent).body.getLinearVelocity());

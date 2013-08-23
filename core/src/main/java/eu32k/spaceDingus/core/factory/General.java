@@ -24,7 +24,7 @@ public class General {
       if (parent == null) {
          EntityFactory.stage.addActor(actor);
       } else {
-         parent.addActor(parent);
+         parent.addActor(actor);
       }
 
       Entity e = EntityFactory.artemisWorld.createEntity();

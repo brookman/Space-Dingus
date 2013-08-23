@@ -105,9 +105,9 @@ public class SpaceDingus implements ApplicationListener {
    }
 
    private static void createEntities() {
-      // Misc.createBackground();
+
       Ship.createPlayerShip(0, 0);
-      Ship.createEnemy(1, 1);
+      // Ship.createEnemy(1, 1);
       Misc.createAsteroid(3, 0);
       Misc.createAsteroid(-2, 1);
    }
@@ -121,7 +121,7 @@ public class SpaceDingus implements ApplicationListener {
    public void render() {
       inputHandler.update();
 
-      Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
+      // Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
       Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
       Gdx.gl.glEnable(GL20.GL_BLEND);
@@ -129,6 +129,9 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld.setDelta(Gdx.graphics.getDeltaTime());
       artemisWorld.process();
+
+      stage.act(Gdx.graphics.getDeltaTime());
+      stage.draw();
    }
 
    @Override
@@ -139,7 +142,17 @@ public class SpaceDingus implements ApplicationListener {
       crop.sub(newVirtualRes);
       crop.scl(.5f);
       viewport = new Rectangle(crop.x, crop.y, newVirtualRes.x, newVirtualRes.y);
+      resize2(width, height);
+   }
 
+   public void resize2(int width, int height) {
+      Vector2 size = Scaling.fit.apply(8.0f, 4.8f, width, height);
+      int viewportX = (int) (width - size.x) / 2;
+      int viewportY = (int) (height - size.y) / 2;
+      int viewportWidth = (int) size.x;
+      int viewportHeight = (int) size.y;
+      Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+      stage.setViewport(stage.getWidth(), stage.getHeight(), true, viewportX, viewportY, viewportWidth, viewportHeight);
    }
 
    @Override
