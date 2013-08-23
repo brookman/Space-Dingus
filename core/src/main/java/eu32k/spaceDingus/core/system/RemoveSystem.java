@@ -6,17 +6,18 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.Bag;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Pools;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.DeathAnimationComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.RemoveMeComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
 
 public class RemoveSystem extends EntityProcessingSystem {
 
    private ComponentMapper<PhysicsComponent> pm;
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
    private ComponentMapper<DeathAnimationComponent> dm;
 
    @SuppressWarnings("unchecked")
@@ -27,16 +28,16 @@ public class RemoveSystem extends EntityProcessingSystem {
    @Override
    protected void initialize() {
       pm = world.getMapper(PhysicsComponent.class);
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
       dm = world.getMapper(DeathAnimationComponent.class);
    }
 
    @Override
    protected void process(Entity e) {
 
-      if (dm.has(e) && tm.has(e)) {
-         TransformComponent pos = tm.get(e);
-         dm.get(e).createAnimation(pos.x, pos.y, pos.getRotation());
+      if (dm.has(e) && am.has(e)) {
+         Actor actor = am.get(e).actor;
+         dm.get(e).createAnimation(actor.getX(), actor.getY(), actor.getRotation());
       }
 
       if (pm.has(e)) {

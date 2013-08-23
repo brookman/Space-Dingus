@@ -9,13 +9,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 
 import eu32k.spaceDingus.core.factory.EntityFactory;
 import eu32k.spaceDingus.core.factory.Misc;
 import eu32k.spaceDingus.core.factory.Ship;
-import eu32k.spaceDingus.core.sceneGraph.SceneGraphWorld;
-import eu32k.spaceDingus.core.sceneGraph.system.SceneGraphSystem;
 import eu32k.spaceDingus.core.system.CollisionDamageSystem;
 import eu32k.spaceDingus.core.system.DamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
@@ -35,6 +34,7 @@ import eu32k.spaceDingus.core.system.moving.TargetingSystem;
 import eu32k.spaceDingus.core.system.rendering.CameraSystem;
 import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
+import eu32k.spaceDingus.core.system.rendering.ParticleRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.SpriteRenderSystem;
 
 public class SpaceDingus implements ApplicationListener {
@@ -48,9 +48,11 @@ public class SpaceDingus implements ApplicationListener {
    public static Rectangle viewport;
    private InputHandler inputHandler;
 
+   private Stage stage;
+
    @Override
    public void create() {
-      camera = new OrthographicCamera(VIRTUAL_WIDTH * 2, VIRTUAL_HEIGHT * 2);
+      camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
       // camera = new PerspectiveCamera(67, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
       // camera.position.set(0f, 0f, 3f);
       // camera.near = 0.05f;
@@ -59,15 +61,17 @@ public class SpaceDingus implements ApplicationListener {
 
       inputHandler = new InputHandler(camera);
 
-      artemisWorld = new SceneGraphWorld();
+      artemisWorld = new com.artemis.World();
       box2dWorld = new World(new Vector2(0, 0), true);
 
       artemisWorld.setManager(new GroupManager());
 
-      EntityFactory.init(artemisWorld, box2dWorld, null);
+      stage = new Stage();
+
+      EntityFactory.init(artemisWorld, box2dWorld, null, stage);
 
       artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
-      artemisWorld.setSystem(new SceneGraphSystem());
+      // artemisWorld.setSystem(new SceneGraphSystem());
       artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
 
       artemisWorld.setSystem(new MovableResetSystem());
@@ -90,6 +94,7 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld.setSystem(new CameraSystem(camera));
       artemisWorld.setSystem(new SpriteRenderSystem(camera));
+      artemisWorld.setSystem(new ParticleRenderSystem(camera));
       // artemisWorld.setSystem(new PolygonModelRenderSystem(camera));
       artemisWorld.setSystem(new DebugRenderSystem(inputHandler, box2dWorld, camera));
       artemisWorld.setSystem(new HealthRenderSystem(camera));
@@ -100,7 +105,7 @@ public class SpaceDingus implements ApplicationListener {
    }
 
    private static void createEntities() {
-      // EntityFactory.createBackground();
+      // Misc.createBackground();
       Ship.createPlayerShip(0, 0);
       Ship.createEnemy(1, 1);
       Misc.createAsteroid(3, 0);
@@ -134,6 +139,7 @@ public class SpaceDingus implements ApplicationListener {
       crop.sub(newVirtualRes);
       crop.scl(.5f);
       viewport = new Rectangle(crop.x, crop.y, newVirtualRes.x, newVirtualRes.y);
+
    }
 
    @Override

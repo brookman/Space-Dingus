@@ -17,20 +17,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import eu32k.spaceDingus.core.InputHandler;
 import eu32k.spaceDingus.core.common.Textures;
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
-import eu32k.spaceDingus.core.sceneGraph.component.NodeComponent;
 
 public class DebugRenderSystem extends EntitySystem {
 
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
    private ComponentMapper<HealthComponent> hm;
-   private ComponentMapper<NodeComponent> nm;
    private ComponentMapper<PhysicsComponent> phm;
    private ComponentMapper<PlayerControlledMovableComponent> plm;
 
@@ -67,7 +66,7 @@ public class DebugRenderSystem extends EntitySystem {
 
    @SuppressWarnings("unchecked")
    public DebugRenderSystem(InputHandler inputHandler, World box2dWorld, Camera camera) {
-      super(Aspect.getAspectForAll(TransformComponent.class));
+      super(Aspect.getAspectForAll(ActorComponent.class));
       this.inputHandler = inputHandler;
       this.box2dWorld = box2dWorld;
       this.camera = camera;
@@ -75,9 +74,8 @@ public class DebugRenderSystem extends EntitySystem {
 
    @Override
    protected void initialize() {
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
       hm = world.getMapper(HealthComponent.class);
-      nm = world.getMapper(NodeComponent.class);
       phm = world.getMapper(PhysicsComponent.class);
       plm = world.getMapper(PlayerControlledMovableComponent.class);
 
@@ -104,7 +102,7 @@ public class DebugRenderSystem extends EntitySystem {
    }
 
    public void drawShapes(Entity e) {
-      TransformComponent pos = tm.get(e);
+      Actor actor = am.get(e).actor;
 
       if (phm.has(e)) {
          Body body = phm.get(e).body;
@@ -112,7 +110,7 @@ public class DebugRenderSystem extends EntitySystem {
          shapeRenderer.begin(ShapeType.Line);
 
          shapeRenderer.setColor(1, 1, 1, 1.0f);
-         shapeRenderer.line(new Vector2(pos.x, pos.y), new Vector2(0, 0));
+         shapeRenderer.line(new Vector2(actor.getX(), actor.getY()), new Vector2(0, 0));
 
          shapeRenderer.end();
       }
@@ -120,10 +118,10 @@ public class DebugRenderSystem extends EntitySystem {
    }
 
    public void drawText(Entity e) {
-      if (nm.has(e) && nm.get(e).getParent() != null) {
-         return;
-      }
-      TransformComponent pos = tm.get(e);
+      // if (nm.has(e) && nm.get(e).getParent() != null) {
+      // return;
+      // }
+      Actor actor = am.get(e).actor;
 
       StringBuffer s = new StringBuffer();
       s.append("\n\n\n\n");
@@ -131,7 +129,7 @@ public class DebugRenderSystem extends EntitySystem {
          s.append("Player\n");
       }
 
-      s.append("X:" + format(pos.x) + " Y:" + format(pos.y) + "\n");
+      s.append("X:" + format(actor.getX()) + " Y:" + format(actor.getY()) + "\n");
       if (hm.has(e)) {
          s.append("HP:" + format(hm.get(e).health) + "/" + format(hm.get(e).maxHealth) + "\n");
       }
@@ -144,7 +142,7 @@ public class DebugRenderSystem extends EntitySystem {
       }
 
       String result = s.toString();
-      debugFont.drawMultiLine(batch, result, pos.x - debugFont.getMultiLineBounds(result).width / 2, pos.y);
+      debugFont.drawMultiLine(batch, result, actor.getX() - debugFont.getMultiLineBounds(result).width / 2, actor.getY());
    }
 
    private static String format(float f) {

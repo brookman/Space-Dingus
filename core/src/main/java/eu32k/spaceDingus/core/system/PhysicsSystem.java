@@ -7,27 +7,28 @@ import com.artemis.EntitySystem;
 import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.PhysicsComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
 
 public class PhysicsSystem extends EntitySystem {
 
    private ComponentMapper<PhysicsComponent> pm;
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
 
    private World box2dWorld;
 
    @SuppressWarnings("unchecked")
    public PhysicsSystem(World box2dWorld) {
-      super(Aspect.getAspectForAll(PhysicsComponent.class, TransformComponent.class));
+      super(Aspect.getAspectForAll(PhysicsComponent.class, ActorComponent.class));
       this.box2dWorld = box2dWorld;
    }
 
    @Override
    protected void initialize() {
       pm = world.getMapper(PhysicsComponent.class);
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
    }
 
    @Override
@@ -44,11 +45,11 @@ public class PhysicsSystem extends EntitySystem {
    }
 
    private void process(Entity e) {
-      TransformComponent trans = tm.get(e);
+      Actor actor = am.get(e).actor;
       PhysicsComponent physics = pm.get(e);
 
-      trans.x = physics.body.getPosition().x;
-      trans.y = physics.body.getPosition().y;
-      trans.setRotation(physics.body.getAngle() * MathUtils.radiansToDegrees);
+      actor.setX(physics.body.getPosition().x);
+      actor.setY(physics.body.getPosition().y);
+      actor.setRotation(physics.body.getAngle() * MathUtils.radiansToDegrees);
    }
 }

@@ -5,34 +5,35 @@ import com.artemis.ComponentMapper;
 import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.CameraTargetComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
 
 public class CameraSystem extends EntityProcessingSystem {
 
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
 
    private Camera camera;
 
    @SuppressWarnings("unchecked")
    public CameraSystem(Camera camera) {
-      super(Aspect.getAspectForAll(CameraTargetComponent.class, TransformComponent.class));
+      super(Aspect.getAspectForAll(CameraTargetComponent.class, ActorComponent.class));
       this.camera = camera;
    }
 
    @Override
    protected void initialize() {
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
    }
 
    @Override
    protected void process(Entity e) {
-      TransformComponent p = tm.get(e);
+      Actor actor = am.get(e).actor;
       // Vector3 target = new Vector3(p.x, p.y, 6f);
       // camera.position.lerp(target, 0.1f);
-      camera.position.x = p.x;
-      camera.position.y = p.y;
+      camera.position.x = actor.getX();
+      camera.position.y = actor.getY();
       // camera.lookAt(p.x, p.y, 0);
       camera.update();
    }

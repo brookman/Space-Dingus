@@ -10,15 +10,16 @@ import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.lights.DirectionalLight;
 import com.badlogic.gdx.graphics.g3d.lights.Lights;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.PolygonModelComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
 import eu32k.spaceDingus.core.component.engine.EngineComponent;
 
 public class PolygonModelRenderSystem extends EntityProcessingSystem {
 
    private ComponentMapper<PolygonModelComponent> pm;
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
    private ComponentMapper<EngineComponent> em;
 
    private Camera camera;
@@ -27,7 +28,7 @@ public class PolygonModelRenderSystem extends EntityProcessingSystem {
 
    @SuppressWarnings("unchecked")
    public PolygonModelRenderSystem(Camera camera) {
-      super(Aspect.getAspectForAll(PolygonModelComponent.class, TransformComponent.class));
+      super(Aspect.getAspectForAll(PolygonModelComponent.class, ActorComponent.class));
       this.camera = camera;
 
       lights = new Lights();
@@ -38,7 +39,7 @@ public class PolygonModelRenderSystem extends EntityProcessingSystem {
    @Override
    protected void initialize() {
       pm = world.getMapper(PolygonModelComponent.class);
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
       em = world.getMapper(EngineComponent.class);
       modelBatch = new ModelBatch();
    }
@@ -51,11 +52,11 @@ public class PolygonModelRenderSystem extends EntityProcessingSystem {
    @Override
    public void process(Entity e) {
       ModelInstance modelInstance = pm.get(e).modelInstance;
-      TransformComponent pos = tm.get(e);
+      Actor actor = am.get(e).actor;
 
-      modelInstance.transform.setToTranslation(pos.x, pos.y, 0);
+      modelInstance.transform.setToTranslation(actor.getX(), actor.getY(), 0);
       modelInstance.transform.rotate(new Vector3(1, 0, 0), 90);
-      modelInstance.transform.rotate(new Vector3(0, 1, 0), pos.getRotation() + 180);
+      modelInstance.transform.rotate(new Vector3(0, 1, 0), actor.getRotation() + 180);
       // modelInstance.transform.rotate(new Vector3(1, 0, 0), 90);
       modelInstance.transform.scale(0.02f, 0.02f, 0.02f);
 

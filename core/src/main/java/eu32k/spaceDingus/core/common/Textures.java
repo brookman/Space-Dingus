@@ -5,6 +5,7 @@ import java.util.HashMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 
 public class Textures {
 
@@ -15,7 +16,7 @@ public class Textures {
       if (texture == null) {
          texture = new Texture(Gdx.files.internal(path), true);
          texture.setFilter(TextureFilter.MipMapLinearLinear, TextureFilter.MipMapLinearLinear);
-         // texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
+         texture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
          textures.put(path, texture);
       }
       return texture;

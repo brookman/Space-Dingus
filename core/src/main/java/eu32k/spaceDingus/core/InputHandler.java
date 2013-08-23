@@ -20,6 +20,8 @@ public class InputHandler {
    public boolean k1;
 
    private Camera camera;
+   private Plane xyPlane = new Plane(new Vector3(0, 0, 1), 0);
+   private Vector3 intersection = new Vector3(0, 0, 0);
 
    public InputHandler(Camera camera) {
       this.camera = camera;
@@ -31,9 +33,7 @@ public class InputHandler {
       // Vector3 temp = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.5f);
       // camera.unproject(temp, SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
 
-      Plane xyPlane = new Plane(new Vector3(0, 0, 1), 0);
       Ray ray = camera.getPickRay(Gdx.input.getX(), Gdx.input.getY(), SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
-      Vector3 intersection = new Vector3(0, 0, 0);
       Intersector.intersectRayPlane(ray, xyPlane, intersection);
 
       mouseX = intersection.x;

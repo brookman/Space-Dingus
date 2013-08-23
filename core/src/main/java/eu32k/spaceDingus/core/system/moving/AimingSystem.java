@@ -6,14 +6,15 @@ import com.artemis.Entity;
 import com.artemis.managers.GroupManager;
 import com.artemis.systems.EntityProcessingSystem;
 import com.artemis.utils.ImmutableBag;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import eu32k.spaceDingus.core.component.TransformComponent;
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 
 public class AimingSystem extends EntityProcessingSystem {
 
    private ComponentMapper<TargetPositionComponent> tpm;
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
 
    @SuppressWarnings("unchecked")
    public AimingSystem() {
@@ -23,7 +24,7 @@ public class AimingSystem extends EntityProcessingSystem {
    @Override
    protected void initialize() {
       tpm = world.getMapper(TargetPositionComponent.class);
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
    }
 
    @Override
@@ -35,9 +36,10 @@ public class AimingSystem extends EntityProcessingSystem {
       targetPositionComponent.enabled = false;
 
       for (Entity enemy : enemies) {
-         if (tm.has(enemy)) {
-            targetPositionComponent.x = tm.get(enemy).x;
-            targetPositionComponent.y = tm.get(enemy).y;
+         if (am.has(enemy)) {
+            Actor actor = am.get(enemy).actor;
+            targetPositionComponent.x = actor.getX();
+            targetPositionComponent.y = actor.getY();
             targetPositionComponent.enabled = true;
          }
          return;

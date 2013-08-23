@@ -7,14 +7,15 @@ import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;
-import eu32k.spaceDingus.core.component.TransformComponent;
 
 public class HealthRenderSystem extends EntityProcessingSystem {
 
-   private ComponentMapper<TransformComponent> tm;
+   private ComponentMapper<ActorComponent> am;
    private ComponentMapper<HealthComponent> hm;
    private ComponentMapper<ShieldComponent> sm;
 
@@ -23,13 +24,13 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
    @SuppressWarnings("unchecked")
    public HealthRenderSystem(Camera camera) {
-      super(Aspect.getAspectForAll(TransformComponent.class).one(HealthComponent.class, ShieldComponent.class));
+      super(Aspect.getAspectForAll(ActorComponent.class).one(HealthComponent.class, ShieldComponent.class));
       this.camera = camera;
    }
 
    @Override
    protected void initialize() {
-      tm = world.getMapper(TransformComponent.class);
+      am = world.getMapper(ActorComponent.class);
       hm = world.getMapper(HealthComponent.class);
       sm = world.getMapper(ShieldComponent.class);
 
@@ -44,7 +45,7 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
    @Override
    public void process(Entity e) {
-      TransformComponent pos = tm.get(e);
+      Actor actor = am.get(e).actor;
 
       float width = 1.0f;
       float height = 0.05f;
@@ -52,22 +53,22 @@ public class HealthRenderSystem extends EntityProcessingSystem {
       if (hm.has(e)) {
          HealthComponent health = hm.get(e);
          shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 0.5f);
-         shapeRenderer.rect(pos.x - width / 2.0f, pos.y + 0.6f, width, height);
+         shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.6f, width, height);
 
          if (health.health > 0.0f) {
             shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-            shapeRenderer.rect(pos.x - width / 2.0f, pos.y + 0.6f, width * (health.health / health.maxHealth), height);
+            shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.6f, width * (health.health / health.maxHealth), height);
          }
       }
 
       if (sm.has(e)) {
          ShieldComponent shield = sm.get(e);
          shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1.0f);
-         shapeRenderer.rect(pos.x - width / 2.0f, pos.y + 0.5f, width, height);
+         shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.5f, width, height);
 
          if (shield.shield > 0.0f) {
             shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 1.0f);
-            shapeRenderer.rect(pos.x - width / 2.0f, pos.y + 0.5f, width * (shield.shield / shield.maxShield), height);
+            shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.5f, width * (shield.shield / shield.maxShield), height);
          }
       }
    }

@@ -4,7 +4,7 @@ import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-import eu32k.spaceDingus.core.SpaceDingus;
+import eu32k.spaceDingus.core.SpaceDingusScene;
 
 public class SpaceDingusDesktop {
    public static void main(String[] args) {
@@ -19,6 +19,6 @@ public class SpaceDingusDesktop {
       cfg.height = 480;
       cfg.addIcon("textures/icons/icon_small.png", FileType.Local);
 
-      new LwjglApplication(new SpaceDingus(), cfg);
+      new LwjglApplication(new SpaceDingusScene(), cfg);
    }
 }
