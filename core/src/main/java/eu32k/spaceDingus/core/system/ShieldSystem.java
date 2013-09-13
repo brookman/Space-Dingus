@@ -6,15 +6,15 @@ import com.artemis.Entity;
 import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.math.MathUtils;
 
+import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.PhysicsShieldComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;
-import eu32k.spaceDingus.core.component.SpriteComponent;
 
 public class ShieldSystem extends EntityProcessingSystem {
 
    private ComponentMapper<ShieldComponent> sm;
    private ComponentMapper<PhysicsShieldComponent> pm;
-   private ComponentMapper<SpriteComponent> spm;
+   private ComponentMapper<ActorComponent> am;
 
    @SuppressWarnings("unchecked")
    public ShieldSystem() {
@@ -25,7 +25,7 @@ public class ShieldSystem extends EntityProcessingSystem {
    protected void initialize() {
       sm = world.getMapper(ShieldComponent.class);
       pm = world.getMapper(PhysicsShieldComponent.class);
-      spm = world.getMapper(SpriteComponent.class);
+      am = world.getMapper(ActorComponent.class);
    }
 
    @Override
@@ -39,12 +39,12 @@ public class ShieldSystem extends EntityProcessingSystem {
          pm.get(e).enableCollision();
       }
 
-      if (spm.has(e)) {
+      if (am.has(e)) {
          float value = shield / max;
          if (value > 0) {
             value = MathUtils.clamp(value, 0.3f, 1.0f);
          }
-         spm.get(e).alpha = value;
+         am.get(e).actor.getColor().a = value;
       }
    }
 }

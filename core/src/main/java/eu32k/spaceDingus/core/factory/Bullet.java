@@ -94,7 +94,7 @@ public class Bullet {
    }
 
    public static Entity createRocket(Vector2 position, Vector2 velocity, float rotation) {
-      Entity e = General.createGroupEntity(position.x, position.y, rotation, null);
+      Entity e = General.createActorEntity(position.x, position.y, rotation, null);
 
       Body body = rocketPool.obtain();
       body.setUserData(e);

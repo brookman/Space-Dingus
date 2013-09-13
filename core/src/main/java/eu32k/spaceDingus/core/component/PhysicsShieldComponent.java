@@ -15,7 +15,8 @@ public class PhysicsShieldComponent extends Component {
    public PhysicsShieldComponent init(Bits bits, Fixture fixture) {
       this.bits = bits;
       this.fixture = fixture;
-      enabled = true;
+      enabled = false;
+      enableCollision();
       return this;
    }
 

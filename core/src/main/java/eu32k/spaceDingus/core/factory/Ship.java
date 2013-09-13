@@ -28,7 +28,7 @@ import eu32k.spaceDingus.core.component.weapon.PlayerControlledWeaponComponent;
 public class Ship {
 
    private static Entity createGenericShip() {
-      Entity e = General.createGroupEntity(0, 0, 0, null);
+      Entity e = General.createActorEntity(0, 0, 0, null);
       e.addComponent(Pools.obtain(MovableComponent.class).init(50f, 50.0f));
       e.addComponent(Pools.obtain(StabilizerComponent.class).init(true, true));
       e.addComponent(Pools.obtain(DamagableComponent.class).init());

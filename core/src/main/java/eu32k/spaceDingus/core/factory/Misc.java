@@ -3,6 +3,7 @@ package eu32k.spaceDingus.core.factory;
 import com.artemis.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -12,6 +13,7 @@ import com.badlogic.gdx.utils.Pools;
 import eu32k.spaceDingus.core.common.Bits;
 import eu32k.spaceDingus.core.common.PhysicsModel;
 import eu32k.spaceDingus.core.common.RenderLayer;
+import eu32k.spaceDingus.core.common.Textures;
 import eu32k.spaceDingus.core.component.DamagableComponent;
 import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
@@ -23,7 +25,7 @@ import eu32k.spaceDingus.core.component.SpriteComponent;
 
 public class Misc {
    public static Entity createShield(Group parent, Bits bits, Fixture fixture, ShieldComponent shield) {
-      Entity e = General.createActorEntity(0, 0, 0, parent);
+      Entity e = General.createActorEntity(0, 0, 1.72f, 1.72f, 0, parent, new TextureRegion(Textures.get("textures/shield.png")));
 
       e.addComponent(shield);
       e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
@@ -34,9 +36,10 @@ public class Misc {
    }
 
    public static Entity createAsteroid(float x, float y) {
-      Entity e = General.createActorEntity(x, y, 0, null);
 
-      PhysicsModel asteroidModel = new PhysicsModel(EntityFactory.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.3f, Bits.SCENERY, false);
+      PhysicsModel asteroidModel = new PhysicsModel(EntityFactory.box2dWorld, null, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.3f, Bits.SCENERY, false);
+      Entity e = General.createActorEntity(x, y, 1.0f, 1.0f, 0, null, new TextureRegion(Textures.get(asteroidModel.getTexturePath())));
+      asteroidModel.getBody().setUserData(e);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));

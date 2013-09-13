@@ -35,7 +35,6 @@ import eu32k.spaceDingus.core.system.rendering.CameraSystem;
 import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.ParticleRenderSystem;
-import eu32k.spaceDingus.core.system.rendering.SpriteRenderSystem;
 
 public class SpaceDingus implements ApplicationListener {
 
@@ -66,12 +65,12 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld.setManager(new GroupManager());
 
-      stage = new Stage();
+      stage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
+      stage.setCamera(camera);
 
       EntityFactory.init(artemisWorld, box2dWorld, null, stage);
 
       artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
-      // artemisWorld.setSystem(new SceneGraphSystem());
       artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
 
       artemisWorld.setSystem(new MovableResetSystem());
@@ -93,7 +92,7 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new RemoveSystem());
 
       artemisWorld.setSystem(new CameraSystem(camera));
-      artemisWorld.setSystem(new SpriteRenderSystem(camera));
+      // artemisWorld.setSystem(new SpriteRenderSystem(camera));
       artemisWorld.setSystem(new ParticleRenderSystem(camera));
       // artemisWorld.setSystem(new PolygonModelRenderSystem(camera));
       artemisWorld.setSystem(new DebugRenderSystem(inputHandler, box2dWorld, camera));
