@@ -1,13 +1,13 @@
 package eu32k.spaceDingus.core.system;
 
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.systems.VoidEntitySystem;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.World;
 
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.systems.VoidEntitySystem;
 import eu32k.spaceDingus.core.component.DamagableComponent;
 import eu32k.spaceDingus.core.component.DamageComponent;
 

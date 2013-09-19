@@ -1,6 +1,6 @@
 package eu32k.spaceDingus.core.component.engine;
 
-import com.artemis.Component;
+import eu32k.gdx.artemis.base.Component;
 
 public class EngineComponent extends Component {
 

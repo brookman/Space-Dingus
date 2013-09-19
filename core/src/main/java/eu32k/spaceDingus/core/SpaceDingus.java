@@ -1,6 +1,5 @@
 package eu32k.spaceDingus.core;
 
-import com.artemis.managers.GroupManager;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
@@ -12,15 +11,15 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 
-import eu32k.spaceDingus.core.factory.EntityFactory;
-import eu32k.spaceDingus.core.factory.Misc;
-import eu32k.spaceDingus.core.factory.Ship;
+import eu32k.gdx.artemis.base.managers.GroupManager;
+import eu32k.gdx.artemis.extension.ExtendedWorld;
+import eu32k.gdx.artemis.extension.system.CameraSystem;
+import eu32k.gdx.artemis.extension.system.PhysicsSystem;
+import eu32k.gdx.artemis.extension.system.RemoveSystem;
 import eu32k.spaceDingus.core.system.CollisionDamageSystem;
 import eu32k.spaceDingus.core.system.DamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
 import eu32k.spaceDingus.core.system.ExpireSystem;
-import eu32k.spaceDingus.core.system.PhysicsSystem;
-import eu32k.spaceDingus.core.system.RemoveSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
 import eu32k.spaceDingus.core.system.WeaponInputSystem;
 import eu32k.spaceDingus.core.system.WeaponSystem;
@@ -31,7 +30,6 @@ import eu32k.spaceDingus.core.system.moving.MovableResetSystem;
 import eu32k.spaceDingus.core.system.moving.StabilizerSystem;
 import eu32k.spaceDingus.core.system.moving.StearingSystem;
 import eu32k.spaceDingus.core.system.moving.TargetingSystem;
-import eu32k.spaceDingus.core.system.rendering.CameraSystem;
 import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.ParticleRenderSystem;
@@ -42,8 +40,9 @@ public class SpaceDingus implements ApplicationListener {
    private static final float VIRTUAL_HEIGHT = 4.8f;
 
    private Camera camera;
-   private com.artemis.World artemisWorld;
+   private ExtendedWorld artemisWorld;
    private World box2dWorld;
+   private Factory factory;
    public static Rectangle viewport;
    private InputHandler inputHandler;
 
@@ -60,15 +59,14 @@ public class SpaceDingus implements ApplicationListener {
 
       inputHandler = new InputHandler(camera);
 
-      artemisWorld = new com.artemis.World();
-      box2dWorld = new World(new Vector2(0, 0), true);
-
-      artemisWorld.setManager(new GroupManager());
-
       stage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
       stage.setCamera(camera);
 
-      EntityFactory.init(artemisWorld, box2dWorld, null, stage);
+      box2dWorld = new World(new Vector2(0, 0), true);
+      artemisWorld = new ExtendedWorld(box2dWorld, stage);
+      artemisWorld.setManager(new GroupManager());
+
+      factory = new Factory(artemisWorld);
 
       artemisWorld.setSystem(new PhysicsSystem(box2dWorld));
       artemisWorld.setSystem(new CollisionDamageSystem(box2dWorld));
@@ -85,7 +83,7 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new ShieldSystem());
 
       artemisWorld.setSystem(new WeaponInputSystem(inputHandler));
-      artemisWorld.setSystem(new WeaponSystem());
+      artemisWorld.setSystem(new WeaponSystem(factory));
 
       artemisWorld.setSystem(new ExpireSystem());
       artemisWorld.setSystem(new DeathSystem());
@@ -103,12 +101,12 @@ public class SpaceDingus implements ApplicationListener {
       createEntities();
    }
 
-   private static void createEntities() {
+   private void createEntities() {
 
-      Ship.createPlayerShip(0, 0);
+      factory.createPlayerShip(0, 0);
       // Ship.createEnemy(1, 1);
-      Misc.createAsteroid(3, 0);
-      Misc.createAsteroid(-2, 1);
+      factory.createAsteroid(3, 0);
+      factory.createAsteroid(-2, 1);
    }
 
    @Override
@@ -131,6 +129,7 @@ public class SpaceDingus implements ApplicationListener {
 
       stage.act(Gdx.graphics.getDeltaTime());
       stage.draw();
+
    }
 
    @Override

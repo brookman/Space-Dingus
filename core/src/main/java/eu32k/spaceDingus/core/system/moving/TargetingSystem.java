@@ -1,16 +1,16 @@
 package eu32k.spaceDingus.core.system.moving;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.gdx.artemis.base.Aspect;
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
+import eu32k.gdx.artemis.extension.component.ActorComponent;
+import eu32k.gdx.artemis.extension.component.PhysicsComponent;
 import eu32k.spaceDingus.core.common.Directions;
-import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.MovableComponent;
-import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 
 public class TargetingSystem extends EntityProcessingSystem {

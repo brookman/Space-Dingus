@@ -1,8 +1,7 @@
 package eu32k.spaceDingus.core.component.weapon;
 
-import com.artemis.Component;
-
-import eu32k.spaceDingus.core.common.Time;
+import eu32k.gdx.artemis.base.Component;
+import eu32k.gdx.common.Time;
 
 public class WeaponComponent extends Component {
 

@@ -1,10 +1,9 @@
 package eu32k.spaceDingus.core.system;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.systems.EntityProcessingSystem;
-
+import eu32k.gdx.artemis.base.Aspect;
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
 import eu32k.spaceDingus.core.component.DamagableComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;

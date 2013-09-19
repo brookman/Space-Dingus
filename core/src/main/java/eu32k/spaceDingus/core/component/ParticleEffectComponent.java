@@ -1,7 +1,8 @@
 package eu32k.spaceDingus.core.component;
 
-import com.artemis.Component;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+
+import eu32k.gdx.artemis.base.Component;
 
 public class ParticleEffectComponent extends Component {
 

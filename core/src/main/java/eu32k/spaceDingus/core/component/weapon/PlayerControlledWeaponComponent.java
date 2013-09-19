@@ -1,6 +1,6 @@
 package eu32k.spaceDingus.core.component.weapon;
 
-import com.artemis.Component;
+import eu32k.gdx.artemis.base.Component;
 
 public class PlayerControlledWeaponComponent extends Component {
 

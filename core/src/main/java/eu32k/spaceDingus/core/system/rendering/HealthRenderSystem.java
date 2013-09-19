@@ -1,15 +1,15 @@
 package eu32k.spaceDingus.core.system.rendering;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import eu32k.spaceDingus.core.component.ActorComponent;
+import eu32k.gdx.artemis.base.Aspect;
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
+import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;
 

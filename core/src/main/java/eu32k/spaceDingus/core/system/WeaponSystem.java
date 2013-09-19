@@ -1,20 +1,22 @@
 package eu32k.spaceDingus.core.system;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.systems.EntityProcessingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
-import eu32k.spaceDingus.core.component.ActorComponent;
-import eu32k.spaceDingus.core.component.PhysicsComponent;
+import eu32k.gdx.artemis.base.Aspect;
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
+import eu32k.gdx.artemis.extension.EntityActor;
+import eu32k.gdx.artemis.extension.component.ActorComponent;
+import eu32k.gdx.artemis.extension.component.PhysicsComponent;
+import eu32k.spaceDingus.core.Factory;
 import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
-import eu32k.spaceDingus.core.factory.Bullet;
 
 public class WeaponSystem extends EntityProcessingSystem {
+
+   private Factory factory;
 
    private ComponentMapper<WeaponComponent> wm;
    private ComponentMapper<ActorComponent> am;
@@ -22,8 +24,9 @@ public class WeaponSystem extends EntityProcessingSystem {
    private ComponentMapper<PhysicsComponent> phm;
 
    @SuppressWarnings("unchecked")
-   public WeaponSystem() {
+   public WeaponSystem(Factory factory) {
       super(Aspect.getAspectForAll(WeaponComponent.class, ActorComponent.class));
+      this.factory = factory;
    }
 
    @Override
@@ -38,10 +41,16 @@ public class WeaponSystem extends EntityProcessingSystem {
    protected void process(Entity e) {
       WeaponComponent weaponComponent = wm.get(e);
 
-      Actor actor = am.get(e).actor;
-      Vector2 position = new Vector2(actor.getX(), actor.getY());
-      Vector2 velocity = new Vector2(weaponComponent.targetX - position.x, weaponComponent.targetY - position.y);
-      actor.setRotation(MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees);
+      EntityActor actor = am.get(e).actor;
+      EntityActor parent = (EntityActor) actor.getParent();
+
+      Vector2 stagePosition = actor.getPositionOnStage();
+
+      Vector2 velocity = new Vector2(weaponComponent.targetX - stagePosition.x, weaponComponent.targetY - stagePosition.y);
+
+      float diff = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees - parent.getRotationOnStage();
+      System.out.println("diff: " + diff);
+      actor.setRotation(diff);
 
       if (!weaponComponent.shouldShoot()) {
          return;
@@ -51,7 +60,7 @@ public class WeaponSystem extends EntityProcessingSystem {
       float rot = MathUtils.atan2(velocity.y, velocity.x);
 
       if (sm.has(e)) {
-         velocity.nor().scl(sm.get(e).speed);
+         velocity.nor().scl(sm.get(e).speed * 0.01f);
       } else {
          velocity.scl(0.0f);
       }
@@ -59,7 +68,7 @@ public class WeaponSystem extends EntityProcessingSystem {
       if (velocity.len() > 7) {
          System.out.println(velocity.len());
       }
-      Bullet.createBullet(position, velocity, rot);
+      factory.createBullet(stagePosition, velocity, rot);
 
       // if (am.has(e)) {
       // Group parent = am.get(e).actor.getParent();

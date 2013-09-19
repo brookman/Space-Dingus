@@ -1,10 +1,5 @@
 package eu32k.spaceDingus.core.system.rendering;
 
-import com.artemis.Aspect;
-import com.artemis.ComponentMapper;
-import com.artemis.Entity;
-import com.artemis.EntitySystem;
-import com.artemis.utils.ImmutableBag;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -19,11 +14,16 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
+import eu32k.gdx.artemis.base.Aspect;
+import eu32k.gdx.artemis.base.ComponentMapper;
+import eu32k.gdx.artemis.base.Entity;
+import eu32k.gdx.artemis.base.EntitySystem;
+import eu32k.gdx.artemis.base.utils.ImmutableBag;
+import eu32k.gdx.artemis.extension.component.ActorComponent;
+import eu32k.gdx.artemis.extension.component.PhysicsComponent;
+import eu32k.gdx.common.Textures;
 import eu32k.spaceDingus.core.InputHandler;
-import eu32k.spaceDingus.core.common.Textures;
-import eu32k.spaceDingus.core.component.ActorComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
-import eu32k.spaceDingus.core.component.PhysicsComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
 
 public class DebugRenderSystem extends EntitySystem {
