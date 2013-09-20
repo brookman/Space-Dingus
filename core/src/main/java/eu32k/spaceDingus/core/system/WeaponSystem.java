@@ -47,9 +47,10 @@ public class WeaponSystem extends EntityProcessingSystem {
       Vector2 stagePosition = actor.getPositionOnStage();
 
       Vector2 velocity = new Vector2(weaponComponent.targetX - stagePosition.x, weaponComponent.targetY - stagePosition.y);
+      float targetDirection = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
 
-      float diff = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees - parent.getRotationOnStage();
-      System.out.println("diff: " + diff);
+      float diff = parent.getRotationOnStage() - targetDirection;
+
       actor.setRotation(diff);
 
       if (!weaponComponent.shouldShoot()) {

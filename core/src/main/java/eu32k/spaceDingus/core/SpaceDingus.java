@@ -155,6 +155,7 @@ public class SpaceDingus implements ApplicationListener {
 
    @Override
    public void pause() {
+      System.out.println("pause");
    }
 
    @Override

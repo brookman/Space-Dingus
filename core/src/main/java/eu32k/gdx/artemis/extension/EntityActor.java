@@ -26,18 +26,13 @@ public class EntityActor extends Group {
 
    @Override
    public void draw(SpriteBatch batch, float parentAlpha) {
-
       Color color = getColor();
       float alpha = color.a * parentAlpha;
       if (trc.has(entity)) {
          batch.setColor(color.r, color.g, color.b, alpha);
-         System.out.println(getOriginX());
-         batch.draw(trc.get(entity).textureRegion, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+         batch.draw(trc.get(entity).textureRegion, getX() - getWidth() / 2.0f, getY() - getHeight() / 2.0f, getOriginX() + getWidth() / 2.0f, getOriginY() + getHeight() / 2.0f, getWidth(),
+               getHeight(), getScaleX(), getScaleY(), getRotation());
       }
-      // SnapshotArray<Actor> children = getChildren();
-      // for (int i = 0; i < children.size; i++) {
-      // children.items[i].draw(batch, alpha);
-      // }
       super.draw(batch, parentAlpha);
    }
 

@@ -29,7 +29,6 @@ import eu32k.spaceDingus.core.component.DamageComponent;
 import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.MovableComponent;
-import eu32k.spaceDingus.core.component.PhysicsShieldComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;
 import eu32k.spaceDingus.core.component.SpeedComponent;
@@ -52,9 +51,12 @@ public class Factory {
    private Entity createActorEntity(float x, float y, float width, float height, float rotation, Group parent) {
       Entity e = world.createEntity();
 
+      // float halfWidth = width / 2.0f;
+      // float halfHeight = height / 2.0f;
+
       EntityActor actor = new EntityActor(world, e);
-      actor.setOriginX(width / 2.0f);
-      actor.setOriginY(height / 2.0f);
+      actor.setOriginX(0);
+      actor.setOriginY(0);
       actor.setX(x);
       actor.setY(y);
       actor.setWidth(width);
@@ -102,7 +104,7 @@ public class Factory {
       Fixture fixture = shipModel.getBody().createFixture(fixtureDef);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(shipModel.getBody());
-      pc.activate(new Vector2(x, y), 0, new Vector2(0.1f, 0));
+      pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(StabilizerComponent.class).init(true, true));
@@ -295,10 +297,10 @@ public class Factory {
    // MISC -------------------------------------------------
 
    public Entity createShield(Group parent, Bits bits, Fixture fixture, ShieldComponent shield) {
-      Entity e = createActorEntity(0, 0, 1.72f, 1.72f, 0, parent);
+      Entity e = createActorEntity(0f, 0f, 1.8f, 1.8f, 0, parent);
 
       e.addComponent(shield);
-      e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
+      // e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/shield.png"))));
 
       e.addToWorld();
@@ -311,6 +313,8 @@ public class Factory {
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));
+      pc.body.applyAngularImpulse(10.0f, true);
+      // pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(DamagableComponent.class).init());
