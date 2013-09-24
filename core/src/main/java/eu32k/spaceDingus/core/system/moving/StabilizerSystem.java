@@ -36,11 +36,11 @@ public class StabilizerSystem extends EntityProcessingSystem {
       Body body = pm.get(e).body;
       if (stabilizerComponent.rotation) {
 
-         if (!Directions.compareOr(movableComponent.directions, Directions.rotateLeft) && !Directions.compareOr(movableComponent.directions, Directions.rotateRight)) {
+         if (!Directions.compareOr(movableComponent.directions, Directions.ROTATE_LEFT) && !Directions.compareOr(movableComponent.directions, Directions.ROTATE_RIGHT)) {
             if (body.getAngularVelocity() < -0.05) {
-               movableComponent.directions |= Directions.rotateLeft;
+               movableComponent.directions |= Directions.ROTATE_LEFT;
             } else if (body.getAngularVelocity() > 0.05) {
-               movableComponent.directions |= Directions.rotateRight;
+               movableComponent.directions |= Directions.ROTATE_RIGHT;
             }
          }
       }

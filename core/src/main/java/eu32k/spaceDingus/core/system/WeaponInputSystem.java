@@ -31,6 +31,5 @@ public class WeaponInputSystem extends EntityProcessingSystem {
       weapon.targetX = handler.mouseX;
       weapon.targetY = handler.mouseY;
       weapon.shootRequested = handler.leftMouse;
-
    }
 }

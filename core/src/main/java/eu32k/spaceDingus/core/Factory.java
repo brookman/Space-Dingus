@@ -1,5 +1,7 @@
 package eu32k.spaceDingus.core;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -18,6 +20,7 @@ import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.ExtendedWorld;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.CameraTargetComponent;
+import eu32k.gdx.artemis.extension.component.ParticleEffectComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
 import eu32k.gdx.artemis.extension.component.TextureRegionComponent;
 import eu32k.gdx.common.PhysicsModel;
@@ -29,6 +32,7 @@ import eu32k.spaceDingus.core.component.DamageComponent;
 import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.MovableComponent;
+import eu32k.spaceDingus.core.component.PhysicsShieldComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
 import eu32k.spaceDingus.core.component.ShieldComponent;
 import eu32k.spaceDingus.core.component.SpeedComponent;
@@ -82,7 +86,6 @@ public class Factory {
       e.addComponent(Pools.obtain(StabilizerComponent.class).init(true, true));
       e.addComponent(Pools.obtain(DamagableComponent.class).init());
       e.addComponent(Pools.obtain(HealthComponent.class).init(100));
-      e.addComponent(Pools.obtain(ShieldComponent.class).init(100));
       return e;
    }
 
@@ -112,16 +115,16 @@ public class Factory {
 
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
-      createEngine(g, -0.45f, -0.31f, 0.0f, 50.0f, Directions.getDirections(true, false, false, false, true, false), 0.5f);
-      createEngine(g, -0.45f, 0.31f, 0.0f, 50.0f, Directions.getDirections(true, false, false, false, false, true), 0.5f);
-      createEngine(g, 0.45f, -0.31f, 180.0f, 50.0f, Directions.getDirections(false, true, false, false, false, true), 0.5f);
-      createEngine(g, 0.45f, 0.31f, 180.0f, 50.0f, Directions.getDirections(false, true, false, false, true, false), 0.5f);
+      createEngine(g, -0.45f, -0.31f, 0.0f, 50.0f, Directions.getDirections(Directions.TRANSLATE_FORWARD, Directions.ROTATE_LEFT), 0.5f);
+      createEngine(g, -0.45f, 0.31f, 0.0f, 50.0f, Directions.getDirections(Directions.TRANSLATE_FORWARD, Directions.ROTATE_RIGHT), 0.5f);
+      createEngine(g, 0.45f, -0.31f, 180.0f, 50.0f, Directions.getDirections(Directions.TRANSLATE_BACKWARD, Directions.ROTATE_RIGHT), 0.5f);
+      createEngine(g, 0.45f, 0.31f, 180.0f, 50.0f, Directions.getDirections(Directions.TRANSLATE_BACKWARD, Directions.ROTATE_LEFT), 0.5f);
 
       createEngine(g, -0.25f, -0.45f, 90.0f, 50.0f, Directions.getDirections(false, false, true, false, false, true), 0.5f);
       createEngine(g, 0.25f, -0.45f, 90.0f, 50.0f, Directions.getDirections(false, false, true, false, true, false), 0.5f);
       createEngine(g, -0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, true, false), 0.5f);
       createEngine(g, 0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, false, true), 0.5f);
-      createShield(g, bits, fixture, e.getComponent(ShieldComponent.class));
+      createShield(g, bits, fixture, 100.0f);
 
       return e;
    }
@@ -158,9 +161,9 @@ public class Factory {
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
       createWeapon(g, 0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(g, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(g, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      createWeapon(g, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      createWeapon(g, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
 
       e.addToWorld();
 
@@ -286,7 +289,7 @@ public class Factory {
       Entity e = createActorEntity(x, y, 0.2f, 0.2f, 0, parent);
 
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/gun.png"))));
-      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(100, 200)));
+      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(500, 1500)));
       e.addComponent(Pools.obtain(SpeedComponent.class).init(7.0f));
 
       e.addToWorld();
@@ -296,11 +299,11 @@ public class Factory {
 
    // MISC -------------------------------------------------
 
-   public Entity createShield(Group parent, Bits bits, Fixture fixture, ShieldComponent shield) {
-      Entity e = createActorEntity(0f, 0f, 1.8f, 1.8f, 0, parent);
+   public Entity createShield(Group parent, Bits bits, Fixture fixture, float shield) {
+      Entity e = createActorEntity(0f, 0f, 1.7f, 1.7f, 0, parent);
 
-      e.addComponent(shield);
-      // e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
+      e.addComponent(Pools.obtain(ShieldComponent.class).init(shield));
+      e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/shield.png"))));
 
       e.addToWorld();
@@ -313,7 +316,6 @@ public class Factory {
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));
-      pc.body.applyAngularImpulse(10.0f, true);
       // pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
 
       e.addComponent(pc);
@@ -340,17 +342,17 @@ public class Factory {
    // return e;
    // }
    //
-   // public static Entity createMuzzleFlash(float x, float y, float rotation) {
-   // Entity e = General.createActorEntity(x, y, rotation, null);
-   //
-   // ParticleEffect effect = new ParticleEffect();
-   // effect.load(Gdx.files.internal("particles/muzzleFlash1.txt"), Gdx.files.internal("textures"));
-   // effect.start();
-   //
-   // e.addComponent(Pools.obtain(ParticleEffectComponent.class).init(effect));
-   // e.addComponent(Pools.obtain(ExpireComponent.class).init(500));
-   // e.addToWorld();
-   // return e;
-   // }
+   public Entity createMuzzleFlash(float x, float y, float rotation, Group parent) {
+      Entity e = createActorEntity(x, y, 1.0f, 1.0f, rotation, parent);
+
+      ParticleEffect effect = new ParticleEffect();
+      effect.load(Gdx.files.internal("particles/muzzleFlash1.txt"), Gdx.files.internal("textures"));
+      effect.start();
+
+      e.addComponent(Pools.obtain(ParticleEffectComponent.class).init(effect));
+      e.addComponent(Pools.obtain(ExpireComponent.class).init(500));
+      e.addToWorld();
+      return e;
+   }
 
 }

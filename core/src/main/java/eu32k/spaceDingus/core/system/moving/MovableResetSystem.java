@@ -22,7 +22,6 @@ public class MovableResetSystem extends EntityProcessingSystem {
 
    @Override
    protected void process(Entity e) {
-      MovableComponent movableComponent = mm.get(e);
-      movableComponent.directions = 0;
+      mm.get(e).directions = 0;
    }
 }

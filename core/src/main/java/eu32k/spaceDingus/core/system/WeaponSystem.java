@@ -49,9 +49,7 @@ public class WeaponSystem extends EntityProcessingSystem {
       Vector2 velocity = new Vector2(weaponComponent.targetX - stagePosition.x, weaponComponent.targetY - stagePosition.y);
       float targetDirection = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
 
-      float diff = parent.getRotationOnStage() - targetDirection;
-
-      actor.setRotation(diff);
+      actor.setRotation(targetDirection - parent.getRotationOnStage());
 
       if (!weaponComponent.shouldShoot()) {
          return;
@@ -61,15 +59,17 @@ public class WeaponSystem extends EntityProcessingSystem {
       float rot = MathUtils.atan2(velocity.y, velocity.x);
 
       if (sm.has(e)) {
-         velocity.nor().scl(sm.get(e).speed * 0.01f);
+         velocity.nor().scl(sm.get(e).speed);
       } else {
          velocity.scl(0.0f);
       }
 
-      if (velocity.len() > 7) {
-         System.out.println(velocity.len());
-      }
+      // if (velocity.len() > 7) {
+      // System.out.println(velocity.len());
+      // }
       factory.createBullet(stagePosition, velocity, rot);
+
+      factory.createMuzzleFlash(0, 0, rot * MathUtils.radiansToDegrees, actor);
 
       // if (am.has(e)) {
       // Group parent = am.get(e).actor.getParent();
@@ -83,7 +83,7 @@ public class WeaponSystem extends EntityProcessingSystem {
       // }
       // }
 
-      // Bullet.createRocket(position, velocity.cpy().scl(0.0f), rot);
+      // factory.createRocket(stagePosition, velocity.cpy().scl(0.0f), rot);
 
       // if (MathUtils.randomBoolean()) {
       // EntityFactory.createBullet(position, velocity, rot);

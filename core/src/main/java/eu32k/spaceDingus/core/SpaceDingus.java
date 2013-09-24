@@ -32,7 +32,7 @@ import eu32k.spaceDingus.core.system.moving.StearingSystem;
 import eu32k.spaceDingus.core.system.moving.TargetingSystem;
 import eu32k.spaceDingus.core.system.rendering.DebugRenderSystem;
 import eu32k.spaceDingus.core.system.rendering.HealthRenderSystem;
-import eu32k.spaceDingus.core.system.rendering.ParticleRenderSystem;
+import eu32k.spaceDingus.core.system.rendering.ParticleEffectSystem;
 
 public class SpaceDingus implements ApplicationListener {
 
@@ -51,12 +51,6 @@ public class SpaceDingus implements ApplicationListener {
    @Override
    public void create() {
       camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-      // camera = new PerspectiveCamera(67, VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-      // camera.position.set(0f, 0f, 3f);
-      // camera.near = 0.05f;
-      // camera.far = 20f;
-      // camera.update();
-
       inputHandler = new InputHandler(camera);
 
       stage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
@@ -77,7 +71,7 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new MovableInputSystem(inputHandler));
       artemisWorld.setSystem(new StabilizerSystem());
       artemisWorld.setSystem(new StearingSystem());
-      artemisWorld.setSystem(new EngineSystem(camera));
+      artemisWorld.setSystem(new EngineSystem());
 
       artemisWorld.setSystem(new DamageSystem());
       artemisWorld.setSystem(new ShieldSystem());
@@ -90,9 +84,7 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new RemoveSystem());
 
       artemisWorld.setSystem(new CameraSystem(camera));
-      // artemisWorld.setSystem(new SpriteRenderSystem(camera));
-      artemisWorld.setSystem(new ParticleRenderSystem(camera));
-      // artemisWorld.setSystem(new PolygonModelRenderSystem(camera));
+      artemisWorld.setSystem(new ParticleEffectSystem());
       artemisWorld.setSystem(new DebugRenderSystem(inputHandler, box2dWorld, camera));
       artemisWorld.setSystem(new HealthRenderSystem(camera));
 
@@ -104,7 +96,7 @@ public class SpaceDingus implements ApplicationListener {
    private void createEntities() {
 
       factory.createPlayerShip(0, 0);
-      // Ship.createEnemy(1, 1);
+      factory.createEnemy(1, 1);
       factory.createAsteroid(3, 0);
       factory.createAsteroid(-2, 1);
    }

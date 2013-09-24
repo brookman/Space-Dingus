@@ -1,4 +1,4 @@
-package eu32k.spaceDingus.core.component;
+package eu32k.gdx.artemis.extension.component;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 

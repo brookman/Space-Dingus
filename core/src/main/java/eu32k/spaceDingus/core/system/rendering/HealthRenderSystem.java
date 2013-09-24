@@ -3,7 +3,7 @@ package eu32k.spaceDingus.core.system.rendering;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.math.Vector2;
 
 import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
@@ -45,30 +45,31 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
    @Override
    public void process(Entity e) {
-      Actor actor = am.get(e).actor;
+
+      Vector2 actorPos = am.get(e).actor.getPositionOnStage();
 
       float width = 1.0f;
-      float height = 0.05f;
+      float height = 0.08f;
 
       if (hm.has(e)) {
          HealthComponent health = hm.get(e);
-         shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 0.5f);
-         shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.6f, width, height);
+         shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 0.3f);
+         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width, height);
 
          if (health.health > 0.0f) {
             shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-            shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.6f, width * (health.health / health.maxHealth), height);
+            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width * (health.health / health.maxHealth), height);
          }
       }
 
       if (sm.has(e)) {
          ShieldComponent shield = sm.get(e);
-         shapeRenderer.setColor(0.3f, 0.3f, 0.3f, 1.0f);
-         shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.5f, width, height);
+         shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 0.3f);
+         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width, height);
 
          if (shield.shield > 0.0f) {
             shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 1.0f);
-            shapeRenderer.rect(actor.getX() - width / 2.0f, actor.getY() + 0.5f, width * (shield.shield / shield.maxShield), height);
+            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width * (shield.shield / shield.maxShield), height);
          }
       }
    }
