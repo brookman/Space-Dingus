@@ -11,10 +11,12 @@ import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.RemoveMeComponent;
+import eu32k.spaceDingus.core.component.ShieldComponent;
 
 public class DeathSystem extends EntityProcessingSystem {
 
    private ComponentMapper<HealthComponent> hm;
+   private ComponentMapper<ShieldComponent> sm;
    private ComponentMapper<ActorComponent> ac;
 
    @SuppressWarnings("unchecked")
@@ -25,12 +27,13 @@ public class DeathSystem extends EntityProcessingSystem {
    @Override
    protected void initialize() {
       hm = world.getMapper(HealthComponent.class);
+      sm = world.getMapper(ShieldComponent.class);
       ac = world.getMapper(ActorComponent.class);
    }
 
    @Override
    protected void process(Entity e) {
-      if (hm.get(e).health <= 0) {
+      if (hm.get(e).health <= 0 && !sm.has(e)) {
          removeRecursively(e);
       }
    }

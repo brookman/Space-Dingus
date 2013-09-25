@@ -17,7 +17,6 @@ import eu32k.gdx.artemis.extension.system.CameraSystem;
 import eu32k.gdx.artemis.extension.system.PhysicsSystem;
 import eu32k.gdx.artemis.extension.system.RemoveSystem;
 import eu32k.spaceDingus.core.system.CollisionDamageSystem;
-import eu32k.spaceDingus.core.system.DamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
 import eu32k.spaceDingus.core.system.ExpireSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
@@ -73,7 +72,6 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new StearingSystem());
       artemisWorld.setSystem(new EngineSystem());
 
-      artemisWorld.setSystem(new DamageSystem());
       artemisWorld.setSystem(new ShieldSystem());
 
       artemisWorld.setSystem(new WeaponInputSystem(inputHandler));
@@ -83,8 +81,9 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.setSystem(new DeathSystem());
       artemisWorld.setSystem(new RemoveSystem());
 
-      artemisWorld.setSystem(new CameraSystem(camera));
       artemisWorld.setSystem(new ParticleEffectSystem());
+
+      artemisWorld.setSystem(new CameraSystem(camera));
       artemisWorld.setSystem(new DebugRenderSystem(inputHandler, box2dWorld, camera));
       artemisWorld.setSystem(new HealthRenderSystem(camera));
 

@@ -27,7 +27,6 @@ import eu32k.gdx.common.PhysicsModel;
 import eu32k.gdx.common.Textures;
 import eu32k.spaceDingus.core.common.Bits;
 import eu32k.spaceDingus.core.common.Directions;
-import eu32k.spaceDingus.core.component.DamagableComponent;
 import eu32k.spaceDingus.core.component.DamageComponent;
 import eu32k.spaceDingus.core.component.ExpireComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
@@ -84,7 +83,6 @@ public class Factory {
 
       e.addComponent(Pools.obtain(MovableComponent.class).init(50f, 50.0f));
       e.addComponent(Pools.obtain(StabilizerComponent.class).init(true, true));
-      e.addComponent(Pools.obtain(DamagableComponent.class).init());
       e.addComponent(Pools.obtain(HealthComponent.class).init(100));
       return e;
    }
@@ -93,18 +91,6 @@ public class Factory {
       Entity e = createGenericShip(x, y);
 
       PhysicsModel shipModel = new PhysicsModel(world.box2dWorld, e, "ship.json", "Ship", 2.0f, 1.0f, 0.5f, bits, false);
-
-      FixtureDef fixtureDef = new FixtureDef();
-      fixtureDef.density = 0.0f;
-      fixtureDef.friction = 1.0f;
-      fixtureDef.restitution = 0.5f;
-      fixtureDef.filter.categoryBits = bits.category;
-      fixtureDef.filter.maskBits = bits.mask;
-      CircleShape shape = new CircleShape();
-      shape.setRadius(0.75f);
-      fixtureDef.shape = shape;
-
-      Fixture fixture = shipModel.getBody().createFixture(fixtureDef);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(shipModel.getBody());
       pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
@@ -124,6 +110,19 @@ public class Factory {
       createEngine(g, 0.25f, -0.45f, 90.0f, 50.0f, Directions.getDirections(false, false, true, false, true, false), 0.5f);
       createEngine(g, -0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, true, false), 0.5f);
       createEngine(g, 0.25f, 0.45f, 270.0f, 50.0f, Directions.getDirections(false, false, false, true, false, true), 0.5f);
+
+      FixtureDef fixtureDef = new FixtureDef();
+      fixtureDef.density = 0.0f;
+      fixtureDef.friction = 1.0f;
+      fixtureDef.restitution = 0.5f;
+      fixtureDef.filter.categoryBits = bits.category;
+      fixtureDef.filter.maskBits = bits.mask;
+      CircleShape shape = new CircleShape();
+      shape.setRadius(0.75f);
+      fixtureDef.shape = shape;
+
+      Fixture fixture = shipModel.getBody().createFixture(fixtureDef);
+
       createShield(g, bits, fixture, 100.0f);
 
       return e;
@@ -209,7 +208,9 @@ public class Factory {
       Entity e = createActorEntity(position.x, position.y, 0.17f, 0.17f, rotation, null);
 
       Body body = bulletBodyPool.obtain();
-      body.setUserData(e);
+      for (Fixture fixture : body.getFixtureList()) {
+         fixture.setUserData(e);
+      }
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(body, bulletBodyPool);
 
@@ -228,7 +229,9 @@ public class Factory {
       Entity e = createActorEntity(position.x, position.y, 0.6f, 0.6f, rotation, null);
 
       Body body = bulletBodyPool2.obtain();
-      body.setUserData(e);
+      for (Fixture fixture : body.getFixtureList()) {
+         fixture.setUserData(e);
+      }
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(body, bulletBodyPool2);
 
@@ -247,7 +250,9 @@ public class Factory {
       Entity e = createActorEntity(position.x, position.y, 0.4f, 0.4f, rotation, null);
 
       Body body = rocketPool.obtain();
-      body.setUserData(e);
+      for (Fixture fixture : body.getFixtureList()) {
+         fixture.setUserData(e);
+      }
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(body, rocketPool);
 
@@ -302,7 +307,10 @@ public class Factory {
    public Entity createShield(Group parent, Bits bits, Fixture fixture, float shield) {
       Entity e = createActorEntity(0f, 0f, 1.7f, 1.7f, 0, parent);
 
-      e.addComponent(Pools.obtain(ShieldComponent.class).init(shield));
+      fixture.setUserData(e);
+
+      e.addComponent(Pools.obtain(ShieldComponent.class).init());
+      e.addComponent(Pools.obtain(HealthComponent.class).init(shield));
       e.addComponent(Pools.obtain(PhysicsShieldComponent.class).init(bits, fixture));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/shield.png"))));
 
@@ -319,7 +327,6 @@ public class Factory {
       // pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
 
       e.addComponent(pc);
-      e.addComponent(Pools.obtain(DamagableComponent.class).init());
       e.addComponent(Pools.obtain(HealthComponent.class).init(50));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get(asteroidModel.getTexturePath()))));
 

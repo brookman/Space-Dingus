@@ -24,7 +24,7 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
    @SuppressWarnings("unchecked")
    public HealthRenderSystem(Camera camera) {
-      super(Aspect.getAspectForAll(ActorComponent.class).one(HealthComponent.class, ShieldComponent.class));
+      super(Aspect.getAspectForAll(ActorComponent.class, HealthComponent.class));
       this.camera = camera;
    }
 
@@ -51,25 +51,21 @@ public class HealthRenderSystem extends EntityProcessingSystem {
       float width = 1.0f;
       float height = 0.08f;
 
-      if (hm.has(e)) {
-         HealthComponent health = hm.get(e);
+      HealthComponent health = hm.get(e);
+
+      if (sm.has(e)) {
+         shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 0.3f);
+         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width, height);
+         if (health.health > 0.0f) {
+            shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 1.0f);
+            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width * (health.health / health.maxHealth), height);
+         }
+      } else {
          shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 0.3f);
          shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width, height);
-
          if (health.health > 0.0f) {
             shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 1.0f);
             shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width * (health.health / health.maxHealth), height);
-         }
-      }
-
-      if (sm.has(e)) {
-         ShieldComponent shield = sm.get(e);
-         shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 0.3f);
-         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width, height);
-
-         if (shield.shield > 0.0f) {
-            shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 1.0f);
-            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width * (shield.shield / shield.maxShield), height);
          }
       }
    }
