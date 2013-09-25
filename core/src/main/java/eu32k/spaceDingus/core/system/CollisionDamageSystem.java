@@ -1,6 +1,5 @@
 package eu32k.spaceDingus.core.system;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -48,24 +47,24 @@ public class CollisionDamageSystem extends VoidEntitySystem implements ContactLi
       Entity entityA = (Entity) contact.getFixtureA().getUserData();
       Entity entityB = (Entity) contact.getFixtureB().getUserData();
 
-      Vector2 resulting = new Vector2(bodyA.getLinearVelocity()).sub(bodyB.getLinearVelocity());
-      float speed = resulting.len();
+      // Vector2 resulting = new Vector2(bodyA.getLinearVelocity()).sub(bodyB.getLinearVelocity());
+      // float speed = resulting.len();
 
       if (dm.has(entityA) && hm.has(entityB)) {
-         hm.get(entityB).health -= dm.get(entityA).damage * speed;
+         hm.get(entityB).health -= dm.get(entityA).damage;
          hm.get(entityB).health = Math.max(hm.get(entityB).health, 0);
          if (dm.get(entityA).nonrecurring) {
-            bodyA.setLinearDamping(1.0f);
-            bodyA.setAngularDamping(1.0f);
+            // bodyA.setLinearDamping(1.0f);
+            // bodyA.setAngularDamping(1.0f);
             dm.get(entityA).damage = 0;
          }
       }
       if (dm.has(entityB) && hm.has(entityA)) {
-         hm.get(entityA).health -= dm.get(entityB).damage * speed;
+         hm.get(entityA).health -= dm.get(entityB).damage;
          hm.get(entityA).health = Math.max(hm.get(entityA).health, 0);
          if (dm.get(entityB).nonrecurring) {
-            bodyB.setLinearDamping(1.0f);
-            bodyB.setAngularDamping(1.0f);
+            // bodyB.setLinearDamping(1.0f);
+            // bodyB.setAngularDamping(1.0f);
             dm.get(entityB).damage = 0;
          }
       }

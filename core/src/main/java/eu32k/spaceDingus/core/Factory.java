@@ -90,7 +90,7 @@ public class Factory {
    private Entity createShipType1(float x, float y, Bits bits) {
       Entity e = createGenericShip(x, y);
 
-      PhysicsModel shipModel = new PhysicsModel(world.box2dWorld, e, "ship.json", "Ship", 2.0f, 1.0f, 0.5f, bits, false);
+      PhysicsModel shipModel = new PhysicsModel(world.box2dWorld, e, "ship.json", "Ship", 2.0f, 1.0f, 0.0f, bits, false);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(shipModel.getBody());
       pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
@@ -122,6 +122,7 @@ public class Factory {
       fixtureDef.shape = shape;
 
       Fixture fixture = shipModel.getBody().createFixture(fixtureDef);
+      fixture.setRestitution(0.0f);
 
       createShield(g, bits, fixture, 100.0f);
 
@@ -155,7 +156,7 @@ public class Factory {
       // });
       // e.addComponent(Pools.obtain(PolygonModelComponent.class).init(model));
 
-      e.addComponent(Pools.obtain(CameraTargetComponent.class));
+      e.addComponent(Pools.obtain(CameraTargetComponent.class).init(false));
 
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
@@ -177,6 +178,8 @@ public class Factory {
          FixtureDef fd = world.fdBuilder.boxShape(0.08f, 0.03f).density(0.5f).friction(1.0f).build();
          Body body = world.bodyBuilder.type(BodyType.DynamicBody).fixture(fd).bullet().categoryBits(Bits.PLAYER_BULLET_CATEGORY).maskBits(Bits.PLAYER_BULLET_MASK).build();
          body.setLinearDamping(0.0f);
+         body.setAngularDamping(0.0f);
+         body.getFixtureList().get(0).setRestitution(0.05f);
          body.resetMassData();
          return body;
       }
@@ -208,6 +211,8 @@ public class Factory {
       Entity e = createActorEntity(position.x, position.y, 0.17f, 0.17f, rotation, null);
 
       Body body = bulletBodyPool.obtain();
+      body.setLinearDamping(0.0f);
+      body.setAngularDamping(0.0f);
       for (Fixture fixture : body.getFixtureList()) {
          fixture.setUserData(e);
       }
@@ -216,7 +221,7 @@ public class Factory {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/bullet.png"))));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(0.3f, true));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(1500));
 
       pc.activate(position, rotation, velocity);
@@ -237,7 +242,7 @@ public class Factory {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/bullet2.png"))));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(0.3f, true));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(1000));
 
       pc.activate(position, rotation, velocity);
@@ -261,13 +266,13 @@ public class Factory {
       e.addComponent(Pools.obtain(MovableComponent.class).init(50f, 50.0f));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/rocket.png"))));
       e.addComponent(Pools.obtain(DamageComponent.class).init(10.0f, true));
-      e.addComponent(Pools.obtain(ExpireComponent.class).init(5000));
+      e.addComponent(Pools.obtain(ExpireComponent.class).init(10000));
 
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
-      createEngine(g, -0.17f, -0.05f, 90f, 0.2f, Directions.getDirections(false, false, false, false, false, true), 0.4f);
-      createEngine(g, -0.17f, 0.05f, -90f, 0.2f, Directions.getDirections(false, false, false, false, true, false), 0.4f);
-      createEngine(g, -0.2f, 0f, 0f, 3.0f, Directions.getDirections(true, false, false, false, false, false), 0.4f);
+      createEngine(g, -0.17f, -0.05f, 90f, 0.1f, Directions.getDirections(false, false, false, false, false, true), 0.4f);
+      createEngine(g, -0.17f, 0.05f, -90f, 0.1f, Directions.getDirections(false, false, false, false, true, false), 0.4f);
+      createEngine(g, -0.2f, 0f, 0f, 1.0f, Directions.getDirections(true, false, false, false, false, false), 0.4f);
 
       pc.activate(position, rotation, velocity);
 
@@ -320,7 +325,7 @@ public class Factory {
 
    public Entity createAsteroid(float x, float y) {
       Entity e = createActorEntity(x, y, 1.0f, 1.0f, 0, null);
-      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.3f, Bits.SCENERY, false);
+      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.0f, Bits.SCENERY, false);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));

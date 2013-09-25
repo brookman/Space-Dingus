@@ -64,26 +64,18 @@ public class WeaponSystem extends EntityProcessingSystem {
          velocity.scl(0.0f);
       }
 
+      if (phm.has(parent.getEntity())) {
+         Vector2 rocketVelocity = new Vector2(phm.get(parent.getEntity()).body.getLinearVelocity());
+         rocketVelocity.add(new Vector2(velocity).nor().scl(0.5f));
+         factory.createRocket(stagePosition, rocketVelocity, rot);
+         velocity.add(phm.get(parent.getEntity()).body.getLinearVelocity());
+      }
+
       // if (velocity.len() > 7) {
       // System.out.println(velocity.len());
       // }
       factory.createBullet(stagePosition, velocity, rot);
-
       factory.createMuzzleFlash(0, 0, rot * MathUtils.radiansToDegrees, actor);
-
-      // if (am.has(e)) {
-      // Group parent = am.get(e).actor.getParent();
-      // Entity parentEntity = parent.
-      //
-      // if (phm.has(parent)) {
-      // velocity.add(phm.get(parent).body.getLinearVelocity());
-      // Bullet.createBullet(position, velocity, rot);
-      // // Bullet.createRocket(position, phm.get(parent).body.getLinearVelocity(), rot);
-      // Misc.createMuzzleFlash(position.x, position.y, rot * MathUtils.radiansToDegrees);
-      // }
-      // }
-
-      // factory.createRocket(stagePosition, velocity.cpy().scl(0.0f), rot);
 
       // if (MathUtils.randomBoolean()) {
       // EntityFactory.createBullet(position, velocity, rot);

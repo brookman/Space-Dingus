@@ -51,8 +51,8 @@ public class TargetingSystem extends EntityProcessingSystem {
          diff = diff - MathUtils.PI2;
       }
 
-      boolean left = diff < 0 && pm.get(e).body.getAngularVelocity() < 3;
-      boolean right = diff > 0 && pm.get(e).body.getAngularVelocity() > -3;
-      movableComponent.directions = Directions.getDirections(true, false, false, false, left, right);
+      boolean left = diff < 0;// && pm.get(e).body.getAngularVelocity() < 0.5;
+      boolean right = diff > 0;// && pm.get(e).body.getAngularVelocity() > -0.5;
+      movableComponent.directions = Directions.getDirections(Math.abs(diff) < MathUtils.PI / 2.0f, false, false, false, left, right);
    }
 }
