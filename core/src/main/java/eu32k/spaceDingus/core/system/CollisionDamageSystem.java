@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import eu32k.gdx.artemis.base.ComponentMapper;
 import eu32k.gdx.artemis.base.Entity;
 import eu32k.gdx.artemis.base.systems.VoidEntitySystem;
+import eu32k.gdx.common.RemoveMarker;
 import eu32k.spaceDingus.core.component.DamageComponent;
 import eu32k.spaceDingus.core.component.HealthComponent;
 
@@ -36,6 +37,21 @@ public class CollisionDamageSystem extends VoidEntitySystem implements ContactLi
       // NOP
    }
 
+   private void handleCollision(Entity damager, Entity damaged) {
+      if (dm.has(damager) && hm.has(damaged)) {
+         hm.get(damaged).health -= dm.get(damager).damage;
+         hm.get(damaged).health = Math.max(hm.get(damaged).health, 0);
+         if (dm.get(damager).nonrecurring) {
+            // bodyA.setLinearDamping(1.0f);
+            // bodyA.setAngularDamping(1.0f);
+            dm.get(damager).damage = 0;
+         }
+         if (dm.get(damager).removeAfterDamage) {
+            RemoveMarker.markForRemovalRecursively(damager);
+         }
+      }
+   }
+
    @Override
    public void beginContact(Contact contact) {
       if (!contact.isTouching()) {
@@ -47,27 +63,8 @@ public class CollisionDamageSystem extends VoidEntitySystem implements ContactLi
       Entity entityA = (Entity) contact.getFixtureA().getUserData();
       Entity entityB = (Entity) contact.getFixtureB().getUserData();
 
-      // Vector2 resulting = new Vector2(bodyA.getLinearVelocity()).sub(bodyB.getLinearVelocity());
-      // float speed = resulting.len();
-
-      if (dm.has(entityA) && hm.has(entityB)) {
-         hm.get(entityB).health -= dm.get(entityA).damage;
-         hm.get(entityB).health = Math.max(hm.get(entityB).health, 0);
-         if (dm.get(entityA).nonrecurring) {
-            // bodyA.setLinearDamping(1.0f);
-            // bodyA.setAngularDamping(1.0f);
-            dm.get(entityA).damage = 0;
-         }
-      }
-      if (dm.has(entityB) && hm.has(entityA)) {
-         hm.get(entityA).health -= dm.get(entityB).damage;
-         hm.get(entityA).health = Math.max(hm.get(entityA).health, 0);
-         if (dm.get(entityB).nonrecurring) {
-            // bodyB.setLinearDamping(1.0f);
-            // bodyB.setAngularDamping(1.0f);
-            dm.get(entityB).damage = 0;
-         }
-      }
+      handleCollision(entityA, entityB);
+      handleCollision(entityB, entityA);
    }
 
    @Override

@@ -38,6 +38,7 @@ import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.StabilizerComponent;
 import eu32k.spaceDingus.core.component.engine.EngineComponent;
 import eu32k.spaceDingus.core.component.weapon.PlayerControlledWeaponComponent;
+import eu32k.spaceDingus.core.component.weapon.RocketComponent;
 import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
 
@@ -90,7 +91,7 @@ public class Factory {
    private Entity createShipType1(float x, float y, Bits bits) {
       Entity e = createGenericShip(x, y);
 
-      PhysicsModel shipModel = new PhysicsModel(world.box2dWorld, e, "ship.json", "Ship", 2.0f, 1.0f, 0.0f, bits, false);
+      PhysicsModel shipModel = new PhysicsModel(world.box2dWorld, e, "ship.json", "Ship", 2.0f, 1.0f, 0.0f, bits, false, 1.0f);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(shipModel.getBody());
       pc.activate(new Vector2(x, y), 0, new Vector2(0, 0));
@@ -161,9 +162,9 @@ public class Factory {
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
       createWeapon(g, 0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      createWeapon(g, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      createWeapon(g, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(g, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      // createWeapon(g, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
 
       e.addToWorld();
 
@@ -221,7 +222,7 @@ public class Factory {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/bullet.png"))));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true, false));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(1500));
 
       pc.activate(position, rotation, velocity);
@@ -242,7 +243,7 @@ public class Factory {
 
       e.addComponent(pc);
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/bullet2.png"))));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(3.0f, true, false));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(1000));
 
       pc.activate(position, rotation, velocity);
@@ -252,27 +253,26 @@ public class Factory {
    }
 
    public Entity createRocket(Vector2 position, Vector2 velocity, float rotation) {
-      Entity e = createActorEntity(position.x, position.y, 0.4f, 0.4f, rotation, null);
+      float size = 0.4f;
+      Entity e = createActorEntity(position.x, position.y, size, size, rotation, null);
 
-      Body body = rocketPool.obtain();
-      for (Fixture fixture : body.getFixtureList()) {
-         fixture.setUserData(e);
-      }
-
-      PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(body, rocketPool);
+      PhysicsModel rocketModel = new PhysicsModel(world.box2dWorld, e, "rockets.json", "Rocket01", 0.5f, 1.0f, 0.0f, Bits.PLAYER_BULLET, false, size);
+      rocketModel.getBody().setAngularDamping(3.0f);
+      PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(rocketModel.getBody());
 
       e.addComponent(pc);
+      e.addComponent(Pools.obtain(RocketComponent.class).init());
       e.addComponent(Pools.obtain(TargetPositionComponent.class).init(0, 0));
       e.addComponent(Pools.obtain(MovableComponent.class).init(50f, 50.0f));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/rocket.png"))));
-      e.addComponent(Pools.obtain(DamageComponent.class).init(10.0f, true));
-      e.addComponent(Pools.obtain(ExpireComponent.class).init(10000));
+      e.addComponent(Pools.obtain(DamageComponent.class).init(20.0f, true, true));
+      e.addComponent(Pools.obtain(ExpireComponent.class).init(5000));
 
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
-      createEngine(g, -0.17f, -0.05f, 90f, 0.1f, Directions.getDirections(false, false, false, false, false, true), 0.4f);
-      createEngine(g, -0.17f, 0.05f, -90f, 0.1f, Directions.getDirections(false, false, false, false, true, false), 0.4f);
-      createEngine(g, -0.2f, 0f, 0f, 1.0f, Directions.getDirections(true, false, false, false, false, false), 0.4f);
+      createEngine(g, -0.12f, -0.04f, 90f, 0.2f, Directions.getDirections(false, false, false, false, false, true), 0.15f);
+      createEngine(g, -0.12f, 0.04f, -90f, 0.2f, Directions.getDirections(false, false, false, false, true, false), 0.15f);
+      createEngine(g, -0.14f, 0f, 0f, 2.0f, Directions.getDirections(true, false, false, false, false, false), 0.3f);
 
       pc.activate(position, rotation, velocity);
 
@@ -283,12 +283,20 @@ public class Factory {
    // ENGINE -------------------------------------------------
 
    public Entity createEngine(Group parent, float x, float y, float rotation, float thrust, int directions, float size) {
-      Entity e = createActorEntity(x, y, size, size, rotation, parent);
+      Entity e = createActorEntity(x, y, 1.0f, 1.0f, rotation, parent);
 
       e.addComponent(Pools.obtain(EngineComponent.class).init(thrust, directions));
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/engine1.png"))));
 
       e.addToWorld();
+
+      Group g = world.getMapper(ActorComponent.class).get(e).actor;
+      g.setScale(size);
+
+      Entity pe = createActorEntity(-0.57f, 0, 0.9f, 0.9f, 0, g);
+      pe.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/fire.png"))));
+
+      pe.addToWorld();
 
       return e;
    }
@@ -299,7 +307,7 @@ public class Factory {
       Entity e = createActorEntity(x, y, 0.2f, 0.2f, 0, parent);
 
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/gun.png"))));
-      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(500, 1500)));
+      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(50, 150)));
       e.addComponent(Pools.obtain(SpeedComponent.class).init(7.0f));
 
       e.addToWorld();
@@ -325,7 +333,7 @@ public class Factory {
 
    public Entity createAsteroid(float x, float y) {
       Entity e = createActorEntity(x, y, 1.0f, 1.0f, 0, null);
-      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.0f, Bits.SCENERY, false);
+      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.0f, Bits.SCENERY, false, 1.0f);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));
@@ -363,6 +371,21 @@ public class Factory {
 
       e.addComponent(Pools.obtain(ParticleEffectComponent.class).init(effect));
       e.addComponent(Pools.obtain(ExpireComponent.class).init(500));
+      e.addToWorld();
+      return e;
+   }
+
+   public Entity createExplosion(Entity at) {
+      EntityActor actor = world.getMapper(ActorComponent.class).get(at).actor;
+
+      Entity e = createActorEntity(actor.getPositionOnStage().x, actor.getPositionOnStage().y, 1.0f, 1.0f, 0, null);
+
+      ParticleEffect effect = new ParticleEffect();
+      effect.load(Gdx.files.internal("particles/explosion2.txt"), Gdx.files.internal("textures"));
+      effect.start();
+
+      e.addComponent(Pools.obtain(ParticleEffectComponent.class).init(effect));
+      e.addComponent(Pools.obtain(ExpireComponent.class).init(2000));
       e.addToWorld();
       return e;
    }

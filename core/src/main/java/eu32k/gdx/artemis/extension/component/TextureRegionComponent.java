@@ -7,9 +7,11 @@ import eu32k.gdx.artemis.base.Component;
 public class TextureRegionComponent extends Component {
 
    public TextureRegion textureRegion;
+   public boolean show = true;
 
    public TextureRegionComponent init(TextureRegion textureRegion) {
       this.textureRegion = textureRegion;
+      show = true;
       return this;
    }
 }

@@ -101,9 +101,9 @@ active: false
 active: false
 - Tint - 
 colorsCount: 3
-colors0: 1.0
-colors1: 0.12156863
-colors2: 0.047058824
+colors0: 0.9254902
+colors1: 0.21176471
+colors2: 0.05490196
 timelineCount: 1
 timeline0: 0.0
 - Transparency - 
@@ -115,12 +115,12 @@ relative: false
 scalingCount: 4
 scaling0: 0.0
 scaling1: 1.0
-scaling2: 0.68421054
+scaling2: 0.9649123
 scaling3: 0.0
 timelineCount: 4
 timeline0: 0.0
-timeline1: 0.034246575
-timeline2: 0.7671233
+timeline1: 0.001
+timeline2: 0.4520548
 timeline3: 1.0
 - Options - 
 attached: false
@@ -129,4 +129,4 @@ aligned: false
 additive: true
 behind: false
 - Image Path -
-C:\setfos_ws\Space-Dingus-Maven\assets\particles\circle.png
+C:\setfos_ws\Space-Dingus-Maven\assets\particles\circle2.png

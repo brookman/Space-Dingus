@@ -1,13 +1,12 @@
 package eu32k.spaceDingus.core.system.moving;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-
 import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
 import eu32k.gdx.artemis.base.Entity;
 import eu32k.gdx.artemis.base.managers.GroupManager;
 import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
 import eu32k.gdx.artemis.base.utils.ImmutableBag;
+import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.spaceDingus.core.component.weapon.TargetPositionComponent;
 
@@ -37,9 +36,9 @@ public class AimingSystem extends EntityProcessingSystem {
 
       for (Entity enemy : enemies) {
          if (am.has(enemy)) {
-            Actor actor = am.get(enemy).actor;
-            targetPositionComponent.x = actor.getX();
-            targetPositionComponent.y = actor.getY();
+            EntityActor actor = am.get(enemy).actor;
+            targetPositionComponent.x = actor.getPositionOnStage().x;
+            targetPositionComponent.y = actor.getPositionOnStage().y;
             targetPositionComponent.enabled = true;
          }
          return;

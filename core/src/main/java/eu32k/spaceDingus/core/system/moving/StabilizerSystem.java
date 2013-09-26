@@ -37,9 +37,9 @@ public class StabilizerSystem extends EntityProcessingSystem {
       if (stabilizerComponent.rotation) {
 
          if (!Directions.compareOr(movableComponent.directions, Directions.ROTATE_LEFT) && !Directions.compareOr(movableComponent.directions, Directions.ROTATE_RIGHT)) {
-            if (body.getAngularVelocity() < -0.05) {
+            if (body.getAngularVelocity() < -0.1) {
                movableComponent.directions |= Directions.ROTATE_LEFT;
-            } else if (body.getAngularVelocity() > 0.05) {
+            } else if (body.getAngularVelocity() > 0.1) {
                movableComponent.directions |= Directions.ROTATE_RIGHT;
             }
          }

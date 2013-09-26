@@ -2,6 +2,7 @@ package eu32k.spaceDingus.core.system;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 
 import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
@@ -65,11 +66,14 @@ public class WeaponSystem extends EntityProcessingSystem {
       }
 
       if (phm.has(parent.getEntity())) {
-         Vector2 rocketVelocity = new Vector2(phm.get(parent.getEntity()).body.getLinearVelocity());
-         rocketVelocity.add(new Vector2(velocity).nor().scl(0.5f));
-         factory.createRocket(stagePosition, rocketVelocity, rot);
-         velocity.add(phm.get(parent.getEntity()).body.getLinearVelocity());
+         Body body = phm.get(parent.getEntity()).body;
+         Vector2 rocketVelocity = new Vector2(body.getLinearVelocity());
+         rocketVelocity.add(new Vector2(MathUtils.cos(body.getAngle()), MathUtils.sin(body.getAngle())).nor().scl(1f));
+         factory.createRocket(stagePosition, rocketVelocity, body.getAngle());
+
       }
+
+      velocity.add(phm.get(parent.getEntity()).body.getLinearVelocity());
 
       // if (velocity.len() > 7) {
       // System.out.println(velocity.len());

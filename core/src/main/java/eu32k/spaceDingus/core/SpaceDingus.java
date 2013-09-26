@@ -2,7 +2,6 @@ package eu32k.spaceDingus.core;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,9 +15,11 @@ import eu32k.gdx.artemis.extension.ExtendedWorld;
 import eu32k.gdx.artemis.extension.system.CameraSystem;
 import eu32k.gdx.artemis.extension.system.PhysicsSystem;
 import eu32k.gdx.artemis.extension.system.RemoveSystem;
+import eu32k.gdx.common.DebugRenderer;
 import eu32k.spaceDingus.core.system.CollisionDamageSystem;
 import eu32k.spaceDingus.core.system.DeathSystem;
 import eu32k.spaceDingus.core.system.ExpireSystem;
+import eu32k.spaceDingus.core.system.PreRemoveSystem;
 import eu32k.spaceDingus.core.system.ShieldSystem;
 import eu32k.spaceDingus.core.system.WeaponInputSystem;
 import eu32k.spaceDingus.core.system.WeaponSystem;
@@ -38,7 +39,7 @@ public class SpaceDingus implements ApplicationListener {
    private static final float VIRTUAL_WIDTH = 8.0f;
    private static final float VIRTUAL_HEIGHT = 4.8f;
 
-   private Camera camera;
+   private OrthographicCamera camera;
    private ExtendedWorld artemisWorld;
    private World box2dWorld;
    private Factory factory;
@@ -50,10 +51,13 @@ public class SpaceDingus implements ApplicationListener {
    @Override
    public void create() {
       camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+      camera.zoom = 1.0f;
       inputHandler = new InputHandler(camera);
 
       stage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
       stage.setCamera(camera);
+
+      DebugRenderer.init(camera);
 
       box2dWorld = new World(new Vector2(0, 0), true);
       artemisWorld = new ExtendedWorld(box2dWorld, stage);
@@ -79,6 +83,7 @@ public class SpaceDingus implements ApplicationListener {
 
       artemisWorld.setSystem(new ExpireSystem());
       artemisWorld.setSystem(new DeathSystem());
+      artemisWorld.setSystem(new PreRemoveSystem(factory));
       artemisWorld.setSystem(new RemoveSystem());
 
       artemisWorld.setSystem(new ParticleEffectSystem());

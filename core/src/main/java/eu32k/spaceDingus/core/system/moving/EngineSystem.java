@@ -3,6 +3,7 @@ package eu32k.spaceDingus.core.system.moving;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
@@ -11,6 +12,7 @@ import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
 import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
+import eu32k.gdx.artemis.extension.component.TextureRegionComponent;
 import eu32k.spaceDingus.core.component.engine.EngineComponent;
 
 public class EngineSystem extends EntityProcessingSystem {
@@ -18,6 +20,7 @@ public class EngineSystem extends EntityProcessingSystem {
    private ComponentMapper<EngineComponent> em;
    private ComponentMapper<ActorComponent> am;
    private ComponentMapper<PhysicsComponent> pm;
+   private ComponentMapper<TextureRegionComponent> trm;
 
    @SuppressWarnings("unchecked")
    public EngineSystem() {
@@ -30,11 +33,20 @@ public class EngineSystem extends EntityProcessingSystem {
       em = world.getMapper(EngineComponent.class);
       am = world.getMapper(ActorComponent.class);
       pm = world.getMapper(PhysicsComponent.class);
+      trm = world.getMapper(TextureRegionComponent.class);
    }
 
    @Override
    protected void process(Entity e) {
       EngineComponent enigne = em.get(e);
+
+      for (Actor actor : am.get(e).actor.getChildren()) {
+         EntityActor ea = (EntityActor) actor;
+         if (trm.has(ea.getEntity())) {
+            trm.get(ea.getEntity()).show = enigne.isRunning;
+         }
+      }
+
       if (!enigne.isRunning) {
          return;
       }

@@ -17,7 +17,7 @@ public class PhysicsModel {
    private BodyEditorLoader loader;
    private String modelName;
 
-   public PhysicsModel(World box2dWorld, Entity e, String fileName, String modelName, float density, float friction, float restitution, Bits bits, boolean bullet) {
+   public PhysicsModel(World box2dWorld, Entity e, String fileName, String modelName, float density, float friction, float restitution, Bits bits, boolean bullet, float scale) {
       this.modelName = modelName;
       FixtureDef fixtureDef = new FixtureDef();
       fixtureDef.density = density;
@@ -36,7 +36,7 @@ public class PhysicsModel {
       body.setAngularDamping(0.1f);
 
       loader = new BodyEditorLoader(Gdx.files.internal("models/" + fileName));
-      loader.attachFixture(body, modelName, fixtureDef, 1);
+      loader.attachFixture(body, modelName, fixtureDef, scale);
       body.resetMassData();
 
       for (Fixture fixture : body.getFixtureList()) {
