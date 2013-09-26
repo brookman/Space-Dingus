@@ -1,5 +1,6 @@
 package eu32k.spaceDingus.core.system;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -11,6 +12,7 @@ import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
 import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
+import eu32k.gdx.common.DebugRenderer;
 import eu32k.spaceDingus.core.Factory;
 import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
@@ -51,6 +53,11 @@ public class WeaponSystem extends EntityProcessingSystem {
       float targetDirection = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
 
       actor.setRotation(targetDirection - parent.getRotationOnStage());
+
+      DebugRenderer.begin(ShapeType.Line);
+      DebugRenderer.getRenderer().setColor(1, 1, 1, 0.5f);
+      DebugRenderer.getRenderer().line(stagePosition, new Vector2(stagePosition).add(new Vector2(velocity).nor().scl(10.0f)));
+      DebugRenderer.end();
 
       if (!weaponComponent.shouldShoot()) {
          return;

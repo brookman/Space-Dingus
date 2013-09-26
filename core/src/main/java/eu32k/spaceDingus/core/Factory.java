@@ -162,7 +162,7 @@ public class Factory {
       Group g = world.getMapper(ActorComponent.class).get(e).actor;
 
       createWeapon(g, 0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
-      // createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
+      createWeapon(g, 0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
       // createWeapon(g, -0.25f, 0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
       // createWeapon(g, -0.25f, -0.31f).addComponent(Pools.obtain(PlayerControlledWeaponComponent.class));
 
@@ -307,7 +307,7 @@ public class Factory {
       Entity e = createActorEntity(x, y, 0.2f, 0.2f, 0, parent);
 
       e.addComponent(Pools.obtain(TextureRegionComponent.class).init(new TextureRegion(Textures.get("textures/gun.png"))));
-      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(50, 150)));
+      e.addComponent(Pools.obtain(WeaponComponent.class).init(MathUtils.random(500, 500)));
       e.addComponent(Pools.obtain(SpeedComponent.class).init(7.0f));
 
       e.addToWorld();
