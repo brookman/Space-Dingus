@@ -1,10 +1,6 @@
 package eu32k.spaceDingus.core.system.rendering;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
@@ -21,7 +17,7 @@ import eu32k.gdx.artemis.base.EntitySystem;
 import eu32k.gdx.artemis.base.utils.ImmutableBag;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
-import eu32k.gdx.common.Textures;
+import eu32k.gdx.common.DebugRenderer;
 import eu32k.spaceDingus.core.InputHandler;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
@@ -36,8 +32,6 @@ public class DebugRenderSystem extends EntitySystem {
    private InputHandler inputHandler;
    private World box2dWorld;
    private Camera camera;
-   private SpriteBatch batch;
-   private BitmapFont debugFont;
    private ShapeRenderer shapeRenderer;
    private Box2DDebugRenderer debugRenderer;
 
@@ -79,7 +73,6 @@ public class DebugRenderSystem extends EntitySystem {
       phm = world.getMapper(PhysicsComponent.class);
       plm = world.getMapper(PlayerControlledMovableComponent.class);
 
-      batch = new SpriteBatch();
       shapeRenderer = new ShapeRenderer();
 
       debugRenderer = new Box2DDebugRenderer();
@@ -90,15 +83,11 @@ public class DebugRenderSystem extends EntitySystem {
       debugRenderer.setDrawJoints(true);
       debugRenderer.setDrawVelocities(true);
 
-      debugFont = new BitmapFont(Gdx.files.internal("fonts/xolonium_green.fnt"), new TextureRegion(Textures.get("fonts/xolonium_green.png")), false);
-      debugFont.setScale(0.0017f);
-      debugFont.setUseIntegerPositions(false);
    }
 
    @Override
    protected void begin() {
       shapeRenderer.setProjectionMatrix(camera.combined);
-      batch.setProjectionMatrix(camera.combined);
    }
 
    public void drawShapes(Entity e) {
@@ -142,7 +131,7 @@ public class DebugRenderSystem extends EntitySystem {
       }
 
       String result = s.toString();
-      debugFont.drawMultiLine(batch, result, actor.getX() - debugFont.getMultiLineBounds(result).width / 2, actor.getY());
+      DebugRenderer.drawText(result, actor.getX(), actor.getY(), false);
    }
 
    private static String format(float f) {
@@ -185,11 +174,9 @@ public class DebugRenderSystem extends EntitySystem {
       }
 
       if (mode == DebugMode.TEXT_ONLY || mode == DebugMode.ALL) {
-         batch.begin();
          for (int i = 0; i < entities.size(); i++) {
             drawText(entities.get(i));
          }
-         batch.end();
       }
    }
 }

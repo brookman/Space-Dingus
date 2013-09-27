@@ -126,6 +126,7 @@ public class SpaceDingus implements ApplicationListener {
       stage.act(Gdx.graphics.getDeltaTime());
       stage.draw();
 
+      DebugRenderer.drawText("FPS: " + Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getWidth() / 2.0f, 0, true);
    }
 
    @Override
