@@ -101,8 +101,10 @@ public class SpaceDingus implements ApplicationListener {
 
       factory.createPlayerShip(0, 0);
       factory.createEnemy(1, 1);
-      factory.createAsteroid(3, 0);
-      factory.createAsteroid(-2, 1);
+      factory.createAsteroid(3, 0, 1);
+      factory.createAsteroid(-2, 1, 2);
+      factory.createAsteroid(-2, -2, 3);
+      factory.createAsteroid(-3, 0, 2);
    }
 
    @Override

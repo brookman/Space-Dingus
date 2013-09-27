@@ -15,8 +15,8 @@ public class SpaceDingusDesktop {
       cfg.samples = 4;
       cfg.vSyncEnabled = true;
       cfg.resizable = true;
-      cfg.width = 800;
-      cfg.height = 480;
+      cfg.width = 1000;
+      cfg.height = 600;
       cfg.addIcon("textures/icons/icon_small.png", FileType.Local);
 
       new LwjglApplication(new SpaceDingus(), cfg);

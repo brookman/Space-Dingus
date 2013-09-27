@@ -331,9 +331,10 @@ public class Factory {
       return e;
    }
 
-   public Entity createAsteroid(float x, float y) {
+   public Entity createAsteroid(float x, float y, int type) {
       Entity e = createActorEntity(x, y, 1.0f, 1.0f, 0, null);
-      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid", 1.0f, 1.0f, 0.0f, Bits.SCENERY, false, 1.0f);
+
+      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid" + type, 1.0f, 1.0f, 0.0f, Bits.SCENERY, false, 1.0f);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));
