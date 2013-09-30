@@ -14,6 +14,8 @@ public class SpaceDingusHtml extends GwtApplication {
 
    @Override
    public GwtApplicationConfiguration getConfig() {
-      return new GwtApplicationConfiguration(800, 480);
+      GwtApplicationConfiguration app = new GwtApplicationConfiguration(1000, 600);
+      app.antialiasing = true;
+      return app;
    }
 }

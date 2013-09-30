@@ -6,6 +6,7 @@
 */libs
 */war
 html/src/main/gwt-unitCache
-html/src/main/webapp
+html/src/main/webapp/WEB-INF
+html/src/main/webapp/spaceDingus
 android/*.jar
 *.gwt-log
