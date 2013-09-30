@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Pools;
 
 import eu32k.gdx.artemis.base.Entity;
 import eu32k.gdx.artemis.base.managers.GroupManager;
+import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.ExtendedWorld;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.CameraTargetComponent;
@@ -101,7 +102,9 @@ public class ShipFactory extends Factory {
       Entity e = createShipType1(x, y, Bits.ENEMY);
       world.getManager(GroupManager.class).add(e, "ENEMY");
 
-      Group g = world.getMapper(ActorComponent.class).get(e).actor;
+      EntityActor ea = world.getMapper(ActorComponent.class).get(e).actor;
+
+      world.getMapper(PhysicsComponent.class).get(e).body.setTransform(new Vector2(x, y), 20.0f);
       // af.createWeapon(g, -0.25f, 0.31f);
       // af.createWeapon(g, -0.25f, -0.31f);
       e.addToWorld();

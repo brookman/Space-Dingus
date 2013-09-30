@@ -34,14 +34,31 @@ public class AimingSystem extends EntityProcessingSystem {
 
       targetPositionComponent.enabled = false;
 
-      for (Entity enemy : enemies) {
-         if (am.has(enemy)) {
-            EntityActor actor = am.get(enemy).actor;
-            targetPositionComponent.x = actor.getPositionOnStage().x;
-            targetPositionComponent.y = actor.getPositionOnStage().y;
-            targetPositionComponent.enabled = true;
+      EntityActor nearestEnemy = null;
+
+      if (am.has(e)) {
+         EntityActor thisActor = am.get(e).actor;
+
+         float minDist = Float.MAX_VALUE;
+
+         for (Entity enemy : enemies) {
+            if (am.has(enemy)) {
+               EntityActor enemyActor = am.get(enemy).actor;
+               float dist = enemyActor.getPositionOnStage().dst(thisActor.getPositionOnStage());
+               if (dist < minDist) {
+                  nearestEnemy = enemyActor;
+                  minDist = dist;
+               }
+            }
          }
-         return;
+      } else if (enemies.size() > 0) {
+         nearestEnemy = am.get(enemies.get(0)).actor;
+      }
+
+      if (nearestEnemy != null) {
+         targetPositionComponent.x = nearestEnemy.getPositionOnStage().x;
+         targetPositionComponent.y = nearestEnemy.getPositionOnStage().y;
+         targetPositionComponent.enabled = true;
       }
    }
 }

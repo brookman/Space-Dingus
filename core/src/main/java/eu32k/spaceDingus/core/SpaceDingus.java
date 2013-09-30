@@ -113,8 +113,8 @@ public class SpaceDingus implements ApplicationListener {
    private void createEntities() {
 
       shipFactory.createPlayerShip(0, 0);
-      shipFactory.createEnemy(1, 1);
-      shipFactory.createEnemy(2, 1);
+      shipFactory.createEnemy(1, 1.0f);
+      shipFactory.createEnemy(-1, 1.2f);
       miscFactory.createAsteroid(3, 0, 1);
       miscFactory.createAsteroid(-2, 1, 2);
       miscFactory.createAsteroid(-2, -2, 3);
