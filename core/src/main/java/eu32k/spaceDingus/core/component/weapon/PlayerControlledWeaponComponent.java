@@ -4,4 +4,7 @@ import eu32k.gdx.artemis.base.Component;
 
 public class PlayerControlledWeaponComponent extends Component {
 
+   public PlayerControlledWeaponComponent init() {
+      return this;
+   }
 }

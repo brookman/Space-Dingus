@@ -4,18 +4,18 @@ import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
 import eu32k.gdx.artemis.base.Entity;
 import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
-import eu32k.spaceDingus.core.Factory;
 import eu32k.spaceDingus.core.component.RemoveMeComponent;
 import eu32k.spaceDingus.core.component.weapon.RocketComponent;
+import eu32k.spaceDingus.core.factory.MiscFactory;
 
 public class PreRemoveSystem extends EntityProcessingSystem {
 
    private ComponentMapper<RocketComponent> rm;
 
-   private Factory factory;
+   private MiscFactory factory;
 
    @SuppressWarnings("unchecked")
-   public PreRemoveSystem(Factory factory) {
+   public PreRemoveSystem(MiscFactory factory) {
       super(Aspect.getAspectForAll(RemoveMeComponent.class));
       this.factory = factory;
    }

@@ -11,7 +11,7 @@ public class Bits {
 
    public static final short PLAYER_MASK = (short) (ENEMY_CATEGORY | ENEMY_BULLET_CATEGORY | SCENERY_CATEGORY);
    public static final short PLAYER_BULLET_MASK = (short) (ENEMY_CATEGORY | SCENERY_CATEGORY);
-   public static final short ENEMY_MASK = (short) (PLAYER_CATEGORY | PLAYER_BULLET_CATEGORY | SCENERY_CATEGORY);
+   public static final short ENEMY_MASK = (short) (ENEMY_CATEGORY | PLAYER_CATEGORY | PLAYER_BULLET_CATEGORY | SCENERY_CATEGORY);
    public static final short ENEMY_BULLET_MASK = (short) (PLAYER_CATEGORY | SCENERY_CATEGORY);
    public static final short SCENERY_MASK = (short) (PLAYER_CATEGORY | PLAYER_BULLET_CATEGORY | ENEMY_CATEGORY | ENEMY_BULLET_CATEGORY | SCENERY_CATEGORY);
    public static final short VOID_MASK = 0;

@@ -48,24 +48,24 @@ public class HealthRenderSystem extends EntityProcessingSystem {
 
       Vector2 actorPos = am.get(e).actor.getPositionOnStage();
 
-      float width = 1.0f;
-      float height = 0.08f;
+      float width = 0.9f;
+      float height = 0.05f;
 
       HealthComponent health = hm.get(e);
 
       if (sm.has(e)) {
-         shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 0.3f);
-         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width, height);
+         shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 0.5f);
+         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.4f, width, height);
          if (health.health > 0.0f) {
             shapeRenderer.setColor(0.0f, 0.3f, 1.0f, 1.0f);
-            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width * (health.health / health.maxHealth), height);
+            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.4f, width * (health.health / health.maxHealth), height);
          }
       } else {
-         shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 0.3f);
-         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width, height);
+         shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 0.5f);
+         shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width, height);
          if (health.health > 0.0f) {
             shapeRenderer.setColor(0.0f, 1.0f, 0.0f, 1.0f);
-            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.6f, width * (health.health / health.maxHealth), height);
+            shapeRenderer.rect(actorPos.x - width / 2.0f, actorPos.y + 0.5f, width * (health.health / health.maxHealth), height);
          }
       }
    }

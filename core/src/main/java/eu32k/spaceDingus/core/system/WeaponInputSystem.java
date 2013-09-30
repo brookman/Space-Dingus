@@ -30,6 +30,10 @@ public class WeaponInputSystem extends EntityProcessingSystem {
       WeaponComponent weapon = wm.get(e);
       weapon.targetX = handler.mouseX;
       weapon.targetY = handler.mouseY;
-      weapon.shootRequested = handler.leftMouse;
+      if (weapon.bulletType == WeaponComponent.BULLET_TYPE_NORMAL) {
+         weapon.shootRequested = handler.leftMouse;
+      } else if (weapon.bulletType == WeaponComponent.BULLET_TYPE_ROCKET) {
+         weapon.shootRequested = handler.space;
+      }
    }
 }

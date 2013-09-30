@@ -3,6 +3,7 @@ package eu32k.gdx.common;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.TextBounds;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -21,7 +22,6 @@ public class DebugRenderer {
       shapeRenderer = new ShapeRenderer();
       batch = new SpriteBatch();
       debugFont = new BitmapFont(Gdx.files.internal("fonts/xolonium_green.fnt"), new TextureRegion(Textures.get("fonts/xolonium_green.png")), false);
-      debugFont.setScale(0.0017f);
       debugFont.setUseIntegerPositions(false);
    }
 
@@ -38,14 +38,20 @@ public class DebugRenderer {
       shapeRenderer.end();
    }
 
-   public static void drawText(String text, float x, float y, boolean unproject) {
+   public static void drawText(String text, float x, float y, float scale, boolean unproject) {
       Vector3 pos = new Vector3(x, y, 0);
       if (unproject) {
          camera.unproject(pos);
       }
       batch.setProjectionMatrix(camera.combined);
       batch.begin();
-      debugFont.drawMultiLine(batch, text, pos.x - debugFont.getMultiLineBounds(text).width / 2, pos.y);
+      debugFont.setScale(scale);
+      TextBounds bounds = debugFont.getMultiLineBounds(text);
+      debugFont.drawMultiLine(batch, text, pos.x - bounds.width / 2.0f, pos.y + bounds.height / 2.0f);
       batch.end();
+   }
+
+   public static void drawText(String text, float x, float y, boolean unproject) {
+      drawText(text, x, y, 0.0017f, unproject);
    }
 }

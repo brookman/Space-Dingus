@@ -9,10 +9,15 @@ import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 
+import eu32k.gdx.common.Time;
 import eu32k.spaceDingus.core.common.Directions;
 
 public class InputHandler {
 
+   public boolean escWasPressed = false;
+   public boolean paused = false;
+
+   public boolean space = false;
    public boolean leftMouse = false;
    public float mouseX = 0;
    public float mouseY = 0;
@@ -30,6 +35,15 @@ public class InputHandler {
 
    public void update() {
       leftMouse = Gdx.input.isButtonPressed(Buttons.LEFT);
+
+      if (!escWasPressed && Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+         paused = !paused;
+         Time.setPaused(paused);
+      }
+
+      escWasPressed = Gdx.input.isKeyPressed(Input.Keys.ESCAPE);
+      space = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+
       // Vector3 temp = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.5f);
       // camera.unproject(temp, SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
 

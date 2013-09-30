@@ -9,13 +9,11 @@ import eu32k.gdx.common.FixtureDefBuilder;
 public class ExtendedWorld extends eu32k.gdx.artemis.base.World {
 
    public World box2dWorld;
-   public Stage stage;
    public FixtureDefBuilder fdBuilder;
    public BodyBuilder bodyBuilder;
 
    public ExtendedWorld(World box2dWorld, Stage stage) {
       this.box2dWorld = box2dWorld;
-      this.stage = stage;
       fdBuilder = new FixtureDefBuilder();
       bodyBuilder = new BodyBuilder(box2dWorld);
    }

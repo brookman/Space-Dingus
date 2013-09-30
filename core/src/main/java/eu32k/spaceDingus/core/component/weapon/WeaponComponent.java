@@ -5,6 +5,9 @@ import eu32k.gdx.common.Time;
 
 public class WeaponComponent extends Component {
 
+   public static int BULLET_TYPE_NORMAL = 0;
+   public static int BULLET_TYPE_ROCKET = 1;
+
    private int shootDelay; // In ms
 
    public boolean shootRequested;
@@ -12,9 +15,13 @@ public class WeaponComponent extends Component {
    public float targetX;
    public float targetY;
    public float precision;
+   public int bulletType;
+   public boolean canRotate;
 
-   public WeaponComponent init(int shootDelay) {
+   public WeaponComponent init(int shootDelay, int bulletType, boolean canRotate) {
       this.shootDelay = shootDelay;
+      this.bulletType = bulletType;
+      this.canRotate = canRotate;
       shootRequested = false;
       lastShoot = 0;
       targetX = 0;

@@ -1,6 +1,5 @@
 package eu32k.spaceDingus.core.system;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -12,24 +11,29 @@ import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
 import eu32k.gdx.artemis.extension.EntityActor;
 import eu32k.gdx.artemis.extension.component.ActorComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
-import eu32k.gdx.common.DebugRenderer;
-import eu32k.spaceDingus.core.Factory;
 import eu32k.spaceDingus.core.component.SpeedComponent;
 import eu32k.spaceDingus.core.component.weapon.WeaponComponent;
+import eu32k.spaceDingus.core.factory.BulletFactory;
+import eu32k.spaceDingus.core.factory.MiscFactory;
 
 public class WeaponSystem extends EntityProcessingSystem {
 
-   private Factory factory;
+   private BulletFactory bf;
+   private MiscFactory mf;
 
    private ComponentMapper<WeaponComponent> wm;
    private ComponentMapper<ActorComponent> am;
    private ComponentMapper<SpeedComponent> sm;
    private ComponentMapper<PhysicsComponent> phm;
 
+   private Vector2 velocity;
+
    @SuppressWarnings("unchecked")
-   public WeaponSystem(Factory factory) {
+   public WeaponSystem(BulletFactory bf, MiscFactory mf) {
       super(Aspect.getAspectForAll(WeaponComponent.class, ActorComponent.class));
-      this.factory = factory;
+      this.bf = bf;
+      this.mf = mf;
+      velocity = new Vector2();
    }
 
    @Override
@@ -49,51 +53,45 @@ public class WeaponSystem extends EntityProcessingSystem {
 
       Vector2 stagePosition = actor.getPositionOnStage();
 
-      Vector2 velocity = new Vector2(weaponComponent.targetX - stagePosition.x, weaponComponent.targetY - stagePosition.y);
+      velocity.set(weaponComponent.targetX - stagePosition.x, weaponComponent.targetY - stagePosition.y);
       float targetDirection = MathUtils.atan2(velocity.y, velocity.x) * MathUtils.radiansToDegrees;
 
-      actor.setRotation(targetDirection - parent.getRotationOnStage());
+      if (weaponComponent.canRotate) {
+         actor.setRotation(targetDirection - parent.getRotationOnStage());
+      }
 
-      DebugRenderer.begin(ShapeType.Line);
-      DebugRenderer.getRenderer().setColor(1, 1, 1, 0.5f);
-      DebugRenderer.getRenderer().line(stagePosition, new Vector2(stagePosition).add(new Vector2(velocity).nor().scl(10.0f)));
-      DebugRenderer.end();
+      // DebugRenderer.begin(ShapeType.Line);
+      // DebugRenderer.getRenderer().setColor(1, 1, 1, 0.5f);
+      // DebugRenderer.getRenderer().line(stagePosition, new Vector2(stagePosition).add(new Vector2(velocity).nor().scl(10.0f)));
+      // DebugRenderer.end();
 
       if (!weaponComponent.shouldShoot()) {
          return;
       }
 
-      velocity.rotate((MathUtils.random() * weaponComponent.precision - weaponComponent.precision / 2.0f) * 360);
-      float rot = MathUtils.atan2(velocity.y, velocity.x);
-
-      if (sm.has(e)) {
-         velocity.nor().scl(sm.get(e).speed);
-      } else {
-         velocity.scl(0.0f);
-      }
-
       if (phm.has(parent.getEntity())) {
-         Body body = phm.get(parent.getEntity()).body;
-         Vector2 rocketVelocity = new Vector2(body.getLinearVelocity());
-         rocketVelocity.add(new Vector2(MathUtils.cos(body.getAngle()), MathUtils.sin(body.getAngle())).nor().scl(1f));
-         factory.createRocket(stagePosition, rocketVelocity, body.getAngle());
+         Body parentBody = phm.get(parent.getEntity()).body;
+         if (weaponComponent.bulletType == WeaponComponent.BULLET_TYPE_ROCKET) {
+            velocity.set(parentBody.getLinearVelocity());
+            velocity.add(MathUtils.cos(actor.getRotationOnStage() * MathUtils.degreesToRadians), MathUtils.sin(actor.getRotationOnStage() * MathUtils.degreesToRadians));
+            bf.createRocket(stagePosition, velocity, actor.getRotationOnStage() * MathUtils.degreesToRadians);
+            weaponComponent.shoot();
+         } else if (weaponComponent.bulletType == WeaponComponent.BULLET_TYPE_NORMAL) {
 
+            velocity.rotate((MathUtils.random() * weaponComponent.precision - weaponComponent.precision / 2.0f) * 360);
+            float rot = MathUtils.atan2(velocity.y, velocity.x);
+
+            if (sm.has(e)) {
+               velocity.nor().scl(sm.get(e).speed);
+            } else {
+               velocity.scl(0.0f);
+            }
+
+            velocity.add(parentBody.getLinearVelocity());
+            bf.createBullet(stagePosition, velocity, rot);
+            mf.createMuzzleFlash(0, 0, rot * MathUtils.radiansToDegrees, actor);
+            weaponComponent.shoot();
+         }
       }
-
-      velocity.add(phm.get(parent.getEntity()).body.getLinearVelocity());
-
-      // if (velocity.len() > 7) {
-      // System.out.println(velocity.len());
-      // }
-      factory.createBullet(stagePosition, velocity, rot);
-      factory.createMuzzleFlash(0, 0, rot * MathUtils.radiansToDegrees, actor);
-
-      // if (MathUtils.randomBoolean()) {
-      // EntityFactory.createBullet(position, velocity, rot);
-      // } else {
-      // Bullet.createBullet2(position, velocity, rot);
-      // }
-
-      weaponComponent.shoot();
    }
 }

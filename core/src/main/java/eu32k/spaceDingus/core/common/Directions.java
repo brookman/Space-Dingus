@@ -17,7 +17,7 @@ public class Directions {
             | (rotateRight ? Directions.ROTATE_RIGHT : 0);
    }
 
-   public static int getDirections(int... directions) {
+   public static int get(int... directions) {
       int result = 0;
       for (int direction : directions) {
          result |= direction;
