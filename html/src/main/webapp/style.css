@@ -24,6 +24,7 @@ h1{
 	width: 1000px;
 }
 #footer {
-   position:absolute;
-   bottom:0;
+   position: absolute;
+   bottom: 0;
+   z-index: -1;
 }
