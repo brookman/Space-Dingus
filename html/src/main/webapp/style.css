@@ -1,0 +1,25 @@
+body {
+	background-color: #333333;
+}
+a:link {
+	font-weight: bold;
+	color: #EEEEEE;
+	font-family: Verdana;
+	margin: 0 auto;
+}
+.title2{
+	font-weight: bold;
+	color: #EEEEEE;
+	font-size: 2em;
+	font-family: Verdana;
+	margin: 0 auto;
+}
+.game {
+    width: 1000px;
+    height: 600px;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
