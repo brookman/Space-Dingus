@@ -5,14 +5,15 @@ a:link {
 	font-weight: bold;
 	color: #EEEEEE;
 	font-family: Verdana;
+	text-align: center;
 	margin: 0 auto;
 }
-.title2{
+h1{
 	font-weight: bold;
 	color: #EEEEEE;
 	font-size: 2em;
 	font-family: Verdana;
-	margin: 0 auto;
+	text-align: center;
 }
 .game {
     width: 1000px;
