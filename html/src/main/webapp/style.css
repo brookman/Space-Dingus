@@ -6,10 +6,6 @@ a:link {
 	color: #EEEEEE;
 	font-family: Verdana;
 }
-.download {
-	text-align: center;
-	margin: 0 auto;
-}
 h1{
 	font-weight: bold;
 	color: #EEEEEE;
@@ -17,12 +13,18 @@ h1{
 	font-family: Verdana;
 	text-align: center;
 }
-.game {
-    width: 1000px;
-    height: 600px;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+#embed-spaceDingus {
     margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	height:	600px;
+	width: 1000px;
+}
+#footer {
+   position:absolute;
+   bottom:0;
+   width:100%;
 }
