@@ -16,7 +16,7 @@ public class SpaceDingusHtml extends GwtApplication {
    public GwtApplicationConfiguration getConfig() {
       GwtApplicationConfiguration app = new GwtApplicationConfiguration(1000, 600);
       app.antialiasing = true;
-      app.canvasId = "game-canvas";
+      app.canvasId = "gameCanvas";
       return app;
    }
 }
