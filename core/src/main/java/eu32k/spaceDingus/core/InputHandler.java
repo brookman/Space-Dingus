@@ -4,10 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Buttons;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Plane;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
 
 import eu32k.gdx.common.Time;
 import eu32k.spaceDingus.core.common.Directions;
@@ -47,8 +45,8 @@ public class InputHandler {
       // Vector3 temp = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0.5f);
       // camera.unproject(temp, SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
 
-      Ray ray = camera.getPickRay(Gdx.input.getX(), Gdx.input.getY(), SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
-      Intersector.intersectRayPlane(ray, xyPlane, intersection);
+      // Ray ray = camera.getPickRay(Gdx.input.getX(), Gdx.input.getY(), SpaceDingus.viewport.x, SpaceDingus.viewport.y, SpaceDingus.viewport.width, SpaceDingus.viewport.height);
+      // Intersector.intersectRayPlane(ray, xyPlane, intersection);
 
       mouseX = intersection.x;
       mouseY = intersection.y;

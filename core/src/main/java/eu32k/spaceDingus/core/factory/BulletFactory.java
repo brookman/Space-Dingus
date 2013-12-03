@@ -20,7 +20,7 @@ import eu32k.gdx.artemis.extension.component.TextureRegionComponent;
 import eu32k.gdx.artemis.extension.factory.Factory;
 import eu32k.gdx.common.PhysicsModel;
 import eu32k.gdx.common.Textures;
-import eu32k.spaceDingus.core.common.Bits;
+import eu32k.spaceDingus.core.common.GameBits;
 import eu32k.spaceDingus.core.common.Directions;
 import eu32k.spaceDingus.core.component.DamageComponent;
 import eu32k.spaceDingus.core.component.ExpireComponent;
@@ -42,7 +42,7 @@ public class BulletFactory extends Factory {
       @Override
       protected Body newObject() {
          FixtureDef fd = world.fdBuilder.boxShape(0.08f, 0.03f).density(0.5f).friction(1.0f).build();
-         Body body = world.bodyBuilder.type(BodyType.DynamicBody).fixture(fd).bullet().categoryBits(Bits.PLAYER_BULLET_CATEGORY).maskBits(Bits.PLAYER_BULLET_MASK).build();
+         Body body = world.bodyBuilder.type(BodyType.DynamicBody).fixture(fd).bullet().categoryBits(GameBits.PLAYER_BULLET_CATEGORY).maskBits(GameBits.PLAYER_BULLET_MASK).build();
          body.setLinearDamping(0.0f);
          body.setAngularDamping(0.0f);
          body.getFixtureList().get(0).setRestitution(0.05f);
@@ -78,7 +78,7 @@ public class BulletFactory extends Factory {
       float size = 0.4f;
       Entity e = createActorEntity(position.x, position.y, size, size, rotation, null);
 
-      PhysicsModel rocketModel = new PhysicsModel(world.box2dWorld, e, "rockets.json", "Rocket01", 0.5f, 1.0f, 0.0f, Bits.PLAYER_BULLET, false, size);
+      PhysicsModel rocketModel = new PhysicsModel(world.box2dWorld, e, "rockets.json", "Rocket01", 0.5f, 1.0f, 0.0f, GameBits.PLAYER_BULLET, false, size);
       rocketModel.getBody().setAngularDamping(3.0f);
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(rocketModel.getBody());
 
@@ -105,7 +105,7 @@ public class BulletFactory extends Factory {
    public Entity createAsteroid(float x, float y, int type) {
       Entity e = createActorEntity(x, y, 1.0f, 1.0f, 0, null);
 
-      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid" + type, 1.0f, 1.0f, 0.0f, Bits.SCENERY, false, 1.0f);
+      PhysicsModel asteroidModel = new PhysicsModel(world.box2dWorld, e, "asteroid.json", "Asteroid" + type, 1.0f, 1.0f, 0.0f, GameBits.SCENERY, false, 1.0f);
 
       PhysicsComponent pc = Pools.obtain(PhysicsComponent.class).init(asteroidModel.getBody());
       pc.activate(new Vector2(x, y), MathUtils.random(MathUtils.PI2), new Vector2(0, 0));

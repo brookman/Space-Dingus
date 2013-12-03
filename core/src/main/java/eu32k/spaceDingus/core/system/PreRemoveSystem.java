@@ -4,7 +4,7 @@ import eu32k.gdx.artemis.base.Aspect;
 import eu32k.gdx.artemis.base.ComponentMapper;
 import eu32k.gdx.artemis.base.Entity;
 import eu32k.gdx.artemis.base.systems.EntityProcessingSystem;
-import eu32k.spaceDingus.core.component.RemoveMeComponent;
+import eu32k.gdx.artemis.extension.component.RemoveMeComponent;
 import eu32k.spaceDingus.core.component.weapon.RocketComponent;
 import eu32k.spaceDingus.core.factory.MiscFactory;
 

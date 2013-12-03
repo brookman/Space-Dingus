@@ -20,5 +20,6 @@ public class SpaceDingusDesktop {
       cfg.addIcon("textures/icons/icon_small.png", FileType.Local);
 
       new LwjglApplication(new SpaceDingus(), cfg);
+      // new LwjglApplication(new VirtualViewportExampleMain(), cfg);
    }
 }

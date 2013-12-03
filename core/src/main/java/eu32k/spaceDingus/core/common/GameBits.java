@@ -1,6 +1,8 @@
 package eu32k.spaceDingus.core.common;
 
-public class Bits {
+import eu32k.gdx.common.Bits;
+
+public class GameBits {
 
    public static final short PLAYER_CATEGORY = 1;
    public static final short PLAYER_BULLET_CATEGORY = 2;
@@ -22,12 +24,4 @@ public class Bits {
    public static final Bits ENEMY_BULLET = new Bits(ENEMY_BULLET_CATEGORY, ENEMY_BULLET_MASK);
    public static final Bits SCENERY = new Bits(SCENERY_CATEGORY, SCENERY_MASK);
    public static final Bits VOID = new Bits(VOID_CATEGORY, VOID_MASK);
-
-   public short category;
-   public short mask;
-
-   public Bits(short category, short mask) {
-      this.category = category;
-      this.mask = mask;
-   }
 }

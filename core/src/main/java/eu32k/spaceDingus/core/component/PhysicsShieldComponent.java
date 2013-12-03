@@ -4,7 +4,8 @@ import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 
 import eu32k.gdx.artemis.base.Component;
-import eu32k.spaceDingus.core.common.Bits;
+import eu32k.gdx.common.Bits;
+import eu32k.spaceDingus.core.common.GameBits;
 
 public class PhysicsShieldComponent extends Component {
 
@@ -36,8 +37,8 @@ public class PhysicsShieldComponent extends Component {
          return;
       }
       Filter filter = fixture.getFilterData();
-      filter.categoryBits = Bits.VOID.category;
-      filter.maskBits = Bits.VOID.mask;
+      filter.categoryBits = GameBits.VOID.category;
+      filter.maskBits = GameBits.VOID.mask;
       fixture.setFilterData(filter);
       enabled = false;
    }

@@ -18,10 +18,11 @@ import eu32k.gdx.artemis.extension.component.CameraTargetComponent;
 import eu32k.gdx.artemis.extension.component.PhysicsComponent;
 import eu32k.gdx.artemis.extension.component.TextureRegionComponent;
 import eu32k.gdx.artemis.extension.factory.Factory;
+import eu32k.gdx.common.Bits;
 import eu32k.gdx.common.PhysicsModel;
 import eu32k.gdx.common.Textures;
-import eu32k.spaceDingus.core.common.Bits;
 import eu32k.spaceDingus.core.common.Directions;
+import eu32k.spaceDingus.core.common.GameBits;
 import eu32k.spaceDingus.core.component.HealthComponent;
 import eu32k.spaceDingus.core.component.MovableComponent;
 import eu32k.spaceDingus.core.component.PlayerControlledMovableComponent;
@@ -99,7 +100,7 @@ public class ShipFactory extends Factory {
    }
 
    public Entity createEnemy(float x, float y) {
-      Entity e = createShipType1(x, y, Bits.ENEMY);
+      Entity e = createShipType1(x, y, GameBits.ENEMY);
       world.getManager(GroupManager.class).add(e, "ENEMY");
 
       EntityActor ea = world.getMapper(ActorComponent.class).get(e).actor;
@@ -112,7 +113,7 @@ public class ShipFactory extends Factory {
    }
 
    public Entity createPlayerShip(float x, float y) {
-      Entity e = createShipType1(x, y, Bits.PLAYER);
+      Entity e = createShipType1(x, y, GameBits.PLAYER);
 
       e.addComponent(new PlayerControlledMovableComponent());
       e.addComponent(Pools.obtain(CameraTargetComponent.class).init(false));

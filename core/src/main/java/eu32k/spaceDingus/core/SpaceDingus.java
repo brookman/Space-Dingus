@@ -8,13 +8,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Scaling;
 
 import eu32k.gdx.artemis.base.managers.GroupManager;
 import eu32k.gdx.artemis.extension.ExtendedWorld;
 import eu32k.gdx.artemis.extension.system.CameraSystem;
 import eu32k.gdx.artemis.extension.system.PhysicsSystem;
 import eu32k.gdx.artemis.extension.system.RemoveSystem;
+import eu32k.gdx.common.AspectViewPort;
 import eu32k.gdx.common.DebugRenderer;
 import eu32k.spaceDingus.core.factory.AccessoryFactory;
 import eu32k.spaceDingus.core.factory.BulletFactory;
@@ -43,7 +43,12 @@ public class SpaceDingus implements ApplicationListener {
    private static final float VIRTUAL_WIDTH = 8.0f;
    private static final float VIRTUAL_HEIGHT = 4.8f;
 
+   public static final float PHYSICS_SCALING_FACTOR = 100.0f;
+
+   private AspectViewPort aspectViewPort;
+
    private OrthographicCamera camera;
+
    private ExtendedWorld artemisWorld;
    private World box2dWorld;
    public static Rectangle viewport;
@@ -59,12 +64,18 @@ public class SpaceDingus implements ApplicationListener {
 
    @Override
    public void create() {
-      camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
-      camera.zoom = 1.0f;
+      // camera = new OrthographicCamera(VIRTUAL_WIDTH, VIRTUAL_HEIGHT);
+      // camera.zoom = 1.0f;
+
+      aspectViewPort = new AspectViewPort(800.0f, 854.0f, 480.0f, 600.0f);
+
+      aspectViewPort = new AspectViewPort(0.5f, 2.0f);
+
       inputHandler = new InputHandler(camera);
 
       gameStage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
-      gameStage.setCamera(camera);
+      camera = (OrthographicCamera) gameStage.getCamera();
+
       hudStage = new Stage(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, true);
 
       DebugRenderer.init(camera);
@@ -108,10 +119,14 @@ public class SpaceDingus implements ApplicationListener {
       artemisWorld.initialize();
 
       createEntities();
+
+      Gdx.gl.glEnable(GL20.GL_BLEND);
+      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+      Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+
    }
 
    private void createEntities() {
-
       shipFactory.createPlayerShip(0, 0);
       shipFactory.createEnemy(1, 1.0f);
       shipFactory.createEnemy(-1, 1.2f);
@@ -130,11 +145,7 @@ public class SpaceDingus implements ApplicationListener {
    public void render() {
       inputHandler.update();
 
-      // Gdx.gl.glViewport((int) viewport.x, (int) viewport.y, (int) viewport.width, (int) viewport.height);
-      Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
       Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-      Gdx.gl.glEnable(GL20.GL_BLEND);
-      Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
       if (!inputHandler.paused) {
          artemisWorld.setDelta(Gdx.graphics.getDeltaTime());
@@ -148,35 +159,44 @@ public class SpaceDingus implements ApplicationListener {
       hudStage.draw();
 
       DebugRenderer.drawText("FPS: " + Gdx.graphics.getFramesPerSecond(), Gdx.graphics.getWidth() / 2.0f, 15, true);
-      DebugRenderer.drawText("Mouse: aim & shoot bullet\nSpace: FIRE ZE MISSILES!", Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() - 25, 0.002f, true);
+      DebugRenderer.drawText("Mouse: aim & shoot bullet\nSpace: FIRE ZE MISSILES!", Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() - 25, 0.003f, true);
       if (inputHandler.paused) {
          DebugRenderer.drawText("Paused", Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f, 0.004f, true);
       }
    }
 
+   // @Override
+   // public void resize(int width, int height) {
+   // // Vector2 newVirtualRes = new Vector2(0f, 0f);
+   // // Vector2 crop = new Vector2(width, height);
+   // newVirtualRes.set(Scaling.fit.apply(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, width, height));
+   // // crop.sub(newVirtualRes);
+   // // crop.scl(.5f);
+   // // viewport = new Rectangle(crop.x, crop.y, newVirtualRes.x, newVirtualRes.y);
+   // // resize2(width, height);
+   //
+   // VirtualViewport virtualViewport = multipleVirtualViewportBuilder.getVirtualViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+   // // Gdx.gl.glViewport(0, 0, (int) (virtualViewport.getWidth() * 100.0f), (int) (virtualViewport.getHeight() * 100.0f));
+   // camera.setVirtualViewport(virtualViewport);
+   // camera.updateViewport();
+   // }
+
    @Override
    public void resize(int width, int height) {
-      Vector2 newVirtualRes = new Vector2(0f, 0f);
-      Vector2 crop = new Vector2(width, height);
-      newVirtualRes.set(Scaling.fit.apply(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, width, height));
-      crop.sub(newVirtualRes);
-      crop.scl(.5f);
-      viewport = new Rectangle(crop.x, crop.y, newVirtualRes.x, newVirtualRes.y);
-      resize2(width, height);
-   }
+      aspectViewPort.update();
 
-   public void resize2(int width, int height) {
-      Vector2 size = Scaling.fit.apply(8.0f, 4.8f, width, height);
-      int viewportX = (int) (width - size.x) / 2;
-      int viewportY = (int) (height - size.y) / 2;
-      int viewportWidth = (int) size.x;
-      int viewportHeight = (int) size.y;
+      int viewportX = Math.round(aspectViewPort.x);
+      int viewportY = Math.round(aspectViewPort.y);
+      int viewportWidth = Math.round(aspectViewPort.width);
+      int viewportHeight = Math.round(aspectViewPort.height);
+
       Gdx.gl.glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-      gameStage.setViewport(gameStage.getWidth(), gameStage.getHeight(), true, viewportX, viewportY, viewportWidth, viewportHeight);
+      gameStage.setViewport(viewportWidth / 100.0f, viewportHeight / 100.0f, true, viewportX, viewportY, viewportWidth, viewportHeight);
    }
 
    @Override
    public void pause() {
+      inputHandler.paused = true;
       System.out.println("pause");
    }
 
