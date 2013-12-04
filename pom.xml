@@ -23,7 +23,7 @@
 
 		<repository>
 			<id>repo</id>
-			<url>https://github.com/brookman/gdx-extensions/raw/master</url>
+			<url>https://github.com/brookman/gdx-extensions/tree/master/repo</url>
 			<snapshots>
 				<enabled>true</enabled>
 				<updatePolicy>always</updatePolicy>
