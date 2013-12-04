@@ -11,15 +11,6 @@
 	<packaging>jar</packaging>
 	<name>SpaceDingus Core</name>
 
-	<repository>
-		<id>repo</id>
-		<url>https://github.com/brookman/gdx-extensions/raw/master</url>
-		<snapshots>
-			<enabled>true</enabled>
-			<updatePolicy>always</updatePolicy>
-		</snapshots>
-	</repository>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.badlogicgames.gdx</groupId>
